@@ -67,7 +67,7 @@ define(["https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"], fun
         var url = 'https://planimation.planning.domains/upload/pddl';
         xhr.open("Post", url);
         xhr.send(formData);
-        xhr.onreadystatechange = function (e) {
+        xhr.onreadystatechange = (e) => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 var status = xhr.status;
                 if (status === 0 || (status >= 200 && status < 400)) {
@@ -299,7 +299,7 @@ define(["https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"], fun
         var url = 'https://planimation.planning.domains/upload/pddl';
         xhr.open("Post", url);
         xhr.send(formData);
-        xhr.onreadystatechange = function (e) {
+        xhr.onreadystatechange = (e) => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 var status = xhr.status;
                 if (status === 0 || (status >= 200 && status < 400)) {
