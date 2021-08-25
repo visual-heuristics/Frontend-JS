@@ -37,6 +37,7 @@ const Inner = () => {
 function Sample() {
     return (
       <div className={styles.sampleBox}>
+        <a>learn react</a>
         <Stage width={1500} height={500} options={{ backgroundColor: 0xcccccc }}>
           <Inner />
         </Stage>
