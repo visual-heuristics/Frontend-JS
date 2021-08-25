@@ -17,6 +17,7 @@ function App() {
         <Route path="/page3" component={PageThree} />
         <Route path="/page4" component={PageFour} />
       </Switch>
+      <div>this is app</div>
     </div>
   );
 }
