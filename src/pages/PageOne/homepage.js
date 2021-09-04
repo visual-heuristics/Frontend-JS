@@ -14,7 +14,7 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-import { createTheme } from '@material-ui/core/styles';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    backgroundColor:"#224878"
   },
   toolbar: {
     flexWrap: 'wrap',
@@ -53,10 +52,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(8, 0, 6),
   },
   cardHeader: {
-    backgroundColor:"#224878",
-    titleTypographyProps:{ align: 'center',color:"#FFFFFF"},
-    color:"#FFFFFF",
-    
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
   },
   cardPricing: {
     display: 'flex',
@@ -78,52 +75,56 @@ const useStyles = makeStyles((theme) => ({
 
 const tiers = [
   {
-    title: 'Porblem',
+    title: 'Free',
     price: '0',
-    description: ['Build visualisation from problem'],
+    description: ['10 users included', '2 GB of storage', 'Help center access', 'Email support'],
     buttonText: 'Sign up for free',
     buttonVariant: 'outlined',
   },
   {
-    title: 'VFG',
-    price: '0',
-    description: ['Build visualisation from VFG'],
-    buttonText: 'Sign up for free',
-    buttonVariant: 'outlined',
+    title: 'Pro',
+    subheader: 'Most popular',
+    price: '15',
+    description: [
+      '20 users included',
+      '10 GB of storage',
+      'Help center access',
+      'Priority email support',
+    ],
+    buttonText: 'Get started',
+    buttonVariant: 'contained',
   },
   {
-    title: 'User Manual',
+    title: 'Enterprise',
     price: '30',
-    description: ['Source document and user manual'],
+    description: [
+      '50 users included',
+      '30 GB of storage',
+      'Help center access',
+      'Phone & email support',
+    ],
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
   },
+];
+const footers = [
   {
-    title: 'Demo',
-    price: '0',
-    description: ['Demo File for visualisation',""],
-    buttonText: 'Sign up for free',
-    buttonVariant: 'outlined',
+    title: 'Company',
+    description: ['Team', 'History', 'Contact us', 'Locations'],
+  },
+  {
+    title: 'Features',
+    description: ['Cool stuff', 'Random feature', 'Team feature', 'Developer stuff', 'Another one'],
+  },
+  {
+    title: 'Resources',
+    description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
+  },
+  {
+    title: 'Legal',
+    description: ['Privacy policy', 'Terms of use'],
   },
 ];
-// const footers = [
-//   {
-//     title: 'Company',
-//     description: ['Team', 'History', 'Contact us', 'Locations'],
-//   },
-//   {
-//     title: 'Features',
-//     description: ['Cool stuff', 'Random feature', 'Team feature', 'Developer stuff', 'Another one'],
-//   },
-//   {
-//     title: 'Resources',
-//     description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
-//   },
-//   {
-//     title: 'Legal',
-//     description: ['Privacy policy', 'Terms of use'],
-//   },
-// ];
 
 export default function Pricing() {
   const classes = useStyles();
@@ -131,65 +132,61 @@ export default function Pricing() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="static" backgroundColor="#224878" elevation={0} className={classes.appBar}>
+      <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h6" color="inherit" align="left" noWrap className={classes.toolbarTitle}>
-            Planimation
+          <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
+            Company name
           </Typography>
           <nav>
-            <Link variant="button" color="inherit" href="#" className={classes.link}>
-              Problem
+            <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+              Features
             </Link>
-            <Link variant="button" color="inherit" href="#" className={classes.link}>
-              VFG
+            <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+              Enterprise
             </Link>
-            <Link variant="button" color="inherit" href="#" className={classes.link}>
-              User Manual
-            </Link>
-            <Link variant="button" color="inherit" href="#" className={classes.link}>
-              Demo
+            <Link variant="button" color="textPrimary" href="#" className={classes.link}>
+              Support
             </Link>
           </nav>
-          <Button href="#" color="inherit" variant="outlined" className={classes.link} >
-            HomePage
+          <Button href="#" color="primary" variant="outlined" className={classes.link}>
+            Login
           </Button>
         </Toolbar>
       </AppBar>
       {/* Hero unit */}
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Planimation
+          Pricing
         </Typography>
         <Typography variant="h5" align="center" color="textSecondary" component="p">
-          Quickly build an visualisation animation form problem or VFG file shows the plan and subplan for each problem.
+          Quickly build an effective pricing table for your potential customers with this layout.
+          It&apos;s built with default Material-UI components with little customization.
         </Typography>
       </Container>
       {/* End hero unit */}
       <Container maxWidth="md" component="main">
-        <Grid container spacing={4} alignItems="stretch" direction="row">
+        <Grid container spacing={5} alignItems="flex-end">
           {tiers.map((tier) => (
             // Enterprise card is full width at sm breakpoint
-            <Grid item key={tier.title} xs={3} sm={tier.title === 'Enterprise' ? 12 : 3} md={3}>
+            <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
               <Card>
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
-                  titleTypographyProps={{ align: 'center' ,color:"secondary"}}
-                  subheaderTypographyProps={{ align: 'center' , color:"inherit"}}
+                  titleTypographyProps={{ align: 'center' }}
+                  subheaderTypographyProps={{ align: 'center' }}
                   action={tier.title === 'Pro' ? <StarIcon /> : null}
                   className={classes.cardHeader}
-                
-                  
                 />
                 <CardContent>
-                  {/* <div className={classes.cardPricing}>
-                    <Typography component="h2" variant="h3" color="inherit">
+                  <div className={classes.cardPricing}>
+                    <Typography component="h2" variant="h3" color="textPrimary">
                       ${tier.price}
                     </Typography>
-                    <Typography variant="h6" color="#FFFFFF">
+                    <Typography variant="h6" color="textSecondary">
                       /mo
                     </Typography>
-                  </div> */}
+                  </div>
                   <ul>
                     {tier.description.map((line) => (
                       <Typography component="li" variant="subtitle1" align="center" key={line}>
@@ -200,7 +197,7 @@ export default function Pricing() {
                 </CardContent>
                 <CardActions>
                   <Button fullWidth variant={tier.buttonVariant} color="primary">
-                    Explore
+                    {tier.buttonText}
                   </Button>
                 </CardActions>
               </Card>
@@ -209,7 +206,7 @@ export default function Pricing() {
         </Grid>
       </Container>
       {/* Footer */}
-      {/* <Container maxWidth="md" component="footer" className={classes.footer}>
+      <Container maxWidth="md" component="footer" className={classes.footer}>
         <Grid container spacing={4} justifyContent="space-evenly">
           {footers.map((footer) => (
             <Grid item xs={6} sm={3} key={footer.title}>
@@ -231,7 +228,7 @@ export default function Pricing() {
         <Box mt={5}>
           <Copyright />
         </Box>
-      </Container> */}
+      </Container>
       {/* End footer */}
     </React.Fragment>
   );
