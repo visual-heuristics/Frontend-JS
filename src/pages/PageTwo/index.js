@@ -174,7 +174,7 @@ export default function Pricing() {
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
-                  titleTypographyProps={{ align: 'center' ,color:"secondary"}}
+                  titleTypographyProps={{ align: 'center' }}
                   subheaderTypographyProps={{ align: 'center' , color:"inherit"}}
                   action={tier.title === 'Pro' ? <StarIcon /> : null}
                   className={classes.cardHeader}
