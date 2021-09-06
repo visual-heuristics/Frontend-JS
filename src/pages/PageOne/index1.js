@@ -127,7 +127,7 @@ const drop1 = {
 
 
 
-class PageTwo extends React.Component {
+class PageOne extends React.Component {
     // init data
     constructor(props) {
         super(props);
@@ -309,5 +309,5 @@ class PageTwo extends React.Component {
     
   }
   
-  export default PageTwo;
+  export default PageOne;
 
