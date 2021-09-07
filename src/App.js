@@ -5,11 +5,13 @@ import PageTwo from './pages/PageTwo';
 import PageThree from './pages/PageThree';
 import PageFour from './pages/PageFour';
 import { withRouter, Route, Switch } from 'react-router-dom';
+import NavigationBar from "@/components/navigationBar/navigationBar";
 
 
 function App() {
   return (
-    <div className={styles.App}>
+    <div>
+      <NavigationBar />
       <Switch>
         <Route path="/" component={HomePage} exact />
         <Route path="/page1" component={PageOne} />
@@ -17,7 +19,7 @@ function App() {
         <Route path="/page3" component={PageThree} />
         <Route path="/page4" component={PageFour} />
       </Switch>
-      <div>this is app</div>
+      {/* <div>this is app</div> */}
     </div>
   );
 }
