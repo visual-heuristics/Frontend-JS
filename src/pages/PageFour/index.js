@@ -7,8 +7,8 @@ import styles from './index.less';
 
 const canvasWidth_Middle = 800
 const canvasHeight_Middle = 800
-const canvasWidth_Left = 400
-const canvasHeight_Left = 800
+// const canvasWidth_Left = 400
+// const canvasHeight_Left = 800
 
 console.info('subGoal', [...subGoal.keys()]);
 
@@ -17,10 +17,17 @@ class PageFour extends React.Component {
     constructor(props) {
         super(props);
 
+        this.stepItem = {};
+        steps.forEach((step, i) => {
+            this.stepItem[i] = React.createRef();
+        })
+
         this.state = {
             // data that will be used/changed in render function
             blockIndex: 0,
-            stepInfoIndex: 0
+            stepInfoIndex: 0,
+            showKey: ''
+
         }
         // Every function that interfaces with UI and data used
         // in this class needs to bind like this:
@@ -29,6 +36,20 @@ class PageFour extends React.Component {
 
     handleOnClick() {
         this.props.history.push('/')
+    }
+
+    handleSubItemClick(key) {
+        console.info("handleSubItemClick(), ", key);
+        // this.state.blockIndex = index;
+        if(this.state.showKey !== key) {
+            this.setState({
+                showKey: key,
+            });
+        } else {
+            this.setState({
+                showKey: "",
+            });
+        }
     }
 
     componentDidMount() {
@@ -44,6 +65,17 @@ class PageFour extends React.Component {
         });
     }
 
+    handleStepClick(value) {
+        console.info("handleStepClick", value);
+        const index = Number(value);
+        this.setState({
+            blockIndex: index,
+            stepInfoIndex: index
+        });
+        console.info('DOM:', this.stepItem[index]);
+        this.stepItem[index].current.scrollIntoView();
+    }
+
     render() {
         return (
             <div className={styles.container}>
@@ -52,7 +84,13 @@ class PageFour extends React.Component {
                         <div className={styles.sub_title}> Steps </div>
                         {
                             steps.map((step, i) => {
-                                return <div onClick={()=>{this.handleSwitchStage(i);}} key={i}><ul><li className={styles.stage_li}>{i + '. ' + step}</li></ul></div>;
+                                return <div className={styles.stage_item}
+                                            style={{backgroundColor: i === this.state.stepInfoIndex ? '#eef': 'white'}}
+                                            onClick={()=>{this.handleSwitchStage(i);}}
+                                            ref={this.stepItem[i]}
+                                            key={i}>
+                                    <ul><li className={styles.stage_li} >{i + '. ' + step}</li></ul>
+                                </div>;
                             })
                         }
                     </div>
@@ -123,7 +161,18 @@ class PageFour extends React.Component {
                     <div className={styles.sub_list}>
                         {
                             [...subGoal.keys()].map(key => {
-                                return <div className={styles.sub_item}>{key}</div>;
+                                return <div className={styles.sub_item} key={key} onClick={()=> {this.handleSubItemClick(key)}}>
+                                    {key}
+                                    <div className={styles.sub_item_menu}
+                                        style={{display: this.state.showKey === key ? 'block': 'none'}}>
+                                        {subGoal.get(key).map(value => {
+                                            return <div className={styles.sub_item_menu_item}
+                                                        onClick={()=>this.handleStepClick(value)}
+                                                        key={key}
+                                            >Step {value}</div>
+                                        })}
+                                    </div>
+                                </div>;
                             })
                         }
                     </div>

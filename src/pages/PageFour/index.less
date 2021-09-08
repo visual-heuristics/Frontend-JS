@@ -18,6 +18,11 @@
 
 .right {
   flex-grow: 1;
+  width: 200px;
+}
+
+.stage_item {
+  padding: 5px 5px;
 }
 
 .stage_li {
@@ -59,4 +64,26 @@ ul {
 .sub_item {
   margin-bottom: 1em;
   text-align: left;
+  position: relative;
+  cursor: pointer;
+}
+
+.sub_item_menu {
+  top: 22px;
+  left: 0;
+  position: absolute;
+  background-color: white;
+  z-index: 100;
+  width: 190px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.sub_item_menu_item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sub_item_menu_item:hover {
+  background-color: #eee;
 }
