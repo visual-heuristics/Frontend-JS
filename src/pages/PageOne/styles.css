@@ -1,0 +1,13 @@
+.drop-area{
+    border: 5px dashed rgb(83, 48, 211);
+    margin: 50px;
+    width: 250px;
+    height: 250px;
+    display: inline-flex;
+    text-align: center;
+    color: rgba(93, 93, 160, 0.281);
+    font-size: 30px;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+}

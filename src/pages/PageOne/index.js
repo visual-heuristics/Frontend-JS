@@ -1,6 +1,8 @@
 import React from "react";
 import Sample from "@/components/sample/Sample";
 import Count from "@/components/Template";
+import DropAndFetch from "@/pages/PageOne/dropAndFetch";
+import "./styles.css";
 
 class PageOne extends React.Component {
     // init data
@@ -24,11 +26,11 @@ class PageOne extends React.Component {
         return (
             <div>
                 <div>Hello Page one!</div> 
-                <Sample/>
+                
                 <div>
                     <button onClick={this.handleOnClick}>to homepage</button>
                 </div>
-                <Count/>
+                <DropAndFetch />
             </div>
             
           );
