@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DragAndDrop from "./dragAndDrop";
-import "./styles.css";
+//import "./styles.css";
 
 class DropAndFetch extends React.Component {
   constructor(props) {
@@ -23,7 +23,8 @@ class DropAndFetch extends React.Component {
     }
     let resp;
 
-    fetch("http://127.0.0.1:8000/upload/pddl", {
+    fetch("https://planimation.planning.domains/upload/pddl", {
+      //"http://127.0.0.1:8000/upload/pddl", {
       method: "POST", //DO NOT use headers
       body: formData, // Dataformat
     })
