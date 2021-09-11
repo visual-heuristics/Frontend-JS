@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import DragAndDrop from "./dragAndDrop";
-//import "./styles.css";
 
 class DropAndFetch extends React.Component {
   constructor(props) {
@@ -47,7 +46,7 @@ class DropAndFetch extends React.Component {
     ) {
       let resp = this.uploadPDDL(this.datas);
     } else {
-      console.log("Some missing files");
+      console.log("Some files are missing");
       alert("Some files are missing");
     }
   };
@@ -60,7 +59,11 @@ class DropAndFetch extends React.Component {
     return (
       <div>
         {this.state.dragsAndDrops.map((drag) => (
-          <DragAndDrop name={drag.name} onLoad={this.handleLoad} />
+          <DragAndDrop
+            key={drag.name}
+            name={drag.name}
+            onLoad={this.handleLoad}
+          />
         ))}
         <input type="button" value="Submit" onClick={this.handleSubmit} />
       </div>
