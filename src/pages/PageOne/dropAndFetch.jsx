@@ -29,24 +29,26 @@ class DropAndFetch extends React.Component {
       body: formData, // Dataformat
     })
       .then(
-        (response) => console.log(response) //resp = response.json()
+        (response) => console.log(response) //read response code and replicate
       )
       .then(
-        (success) => (resp = success) //console.log(success)
+        (success) => (resp = success) //success contains the VFG
       )
       .catch((error) => console.log(error));
     return resp;
   };
 
   handleSubmit = () => {
+    //Control check for files
     if (
       "domain" in this.datas &&
       "problem" in this.datas &&
       "animation" in this.datas
     ) {
-      let resp = this.upload(this.datas).bind(this);
+      let resp = this.uploadPDDL(this.datas);
     } else {
       console.log("Some missing files");
+      alert("Some files are missing");
     }
   };
 
@@ -58,7 +60,7 @@ class DropAndFetch extends React.Component {
     return (
       <div>
         {this.state.dragsAndDrops.map((drag) => (
-          <DragAndDrop name={drag.name} />
+          <DragAndDrop name={drag.name} onLoad={this.handleLoad} />
         ))}
         <input type="button" value="Submit" onClick={this.handleSubmit} />
       </div>
