@@ -9,9 +9,9 @@ class DropAndFetch extends React.Component {
 
   state = {
     dragsAndDrops: [
-      { name: "domain", fileType: "*.pddl" },
-      { name: "problem", fileType: "*.pddl" },
-      { name: "animation", fileType: "*.pddl" },
+      { name: "domain", fileType: ".pddl" },
+      { name: "problem", fileType: ".pddl" },
+      { name: "animation", fileType: ".pddl" },
     ],
   };
 
@@ -45,6 +45,7 @@ class DropAndFetch extends React.Component {
       "animation" in this.datas
     ) {
       let resp = this.uploadPDDL(this.datas);
+      console.log(resp);
     } else {
       console.log("Some files are missing");
       alert("Some files are missing");
@@ -62,6 +63,7 @@ class DropAndFetch extends React.Component {
           <DragAndDrop
             key={drag.name}
             name={drag.name}
+            type={drag.fileType}
             onLoad={this.handleLoad}
           />
         ))}

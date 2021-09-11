@@ -12,7 +12,7 @@ class DragAndDrop extends React.Component {
     this.nv.addEventListener("drop", (event) => {
       event.stopPropagation();
       event.preventDefault();
-      if (event.dataTransfer.files[0].name.endsWith(".pddl")) {
+      if (event.dataTransfer.files[0].name.endsWith(this.props.type)) {
         this.nv.textContent = event.dataTransfer.files[0].name;
         event.dataTransfer.files[0].text().then((result) => {
           this.props.onLoad(this.props.name, result);
