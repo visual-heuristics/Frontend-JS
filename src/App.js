@@ -7,6 +7,7 @@ import PageFour from './pages/PageFour';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import { createTheme } from '@material-ui/core';
+import NavigationBar from "@/components/navigationBar/navigationBar";
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ function App() {
   return (
     <div className={styles.App}>
       <ThemeProvider theme={theme}>
+      <NavigationBar />
       <Switch>
         <Route path="/" component={HomePage} exact />
         <Route path="/page1" component={PageOne} />
@@ -32,7 +34,7 @@ function App() {
         <Route path="/page4" component={PageFour} />
       </Switch>
       </ThemeProvider>
-      <div>this is app</div>
+      {/* <div>this is app</div> */}
     </div>
   );
 }
