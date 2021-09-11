@@ -11,4 +11,4 @@ it("Renders Correctly ", () => {
 
 it("Object fetch data", () =>{
     expect(true).toBeTruthy();
-})
+});
