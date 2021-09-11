@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import DropAndFetch from './DropAndFetch';
+import DropAndFetch from './dropAndFetch';
 
 it("Renders Correctly ", () => {
     const div = document.createElement("div");
