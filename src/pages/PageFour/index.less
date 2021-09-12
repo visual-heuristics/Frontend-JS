@@ -4,10 +4,11 @@
 
 .left {
   flex-grow: 1;
+  width: 250px;
 }
 
 .left_upper {
-  height: 400px;
+  height: 250px;
   overflow-y: scroll;
 
 }
@@ -17,8 +18,8 @@
 }
 
 .right {
-  flex-grow: 1;
-  width: 200px;
+  //flex-grow: 1;
+  width: 220px;
 }
 
 .stage_item {
@@ -49,12 +50,14 @@ ul {
   padding: 6px;
   font-weight: bold;
   //border: 1px solid red;
-  margin-bottom: 12px;
 }
 
 .step_info {
   white-space: pre;
   text-align: left;
+  height: 220px;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 .sub_list {
@@ -62,21 +65,24 @@ ul {
 }
 
 .sub_item {
-  margin-bottom: 1em;
-  text-align: left;
+  height: 30px;
+  text-align: center;
   position: relative;
   cursor: pointer;
+  background-color: rgb(255, 255, 255);
 }
 
 .sub_item_menu {
   top: 22px;
   left: 0;
   position: absolute;
-  background-color: white;
+  background-color: rgb(246, 248, 246);
   z-index: 100;
-  width: 190px;
-  overflow-y: auto;
-  max-height: 200px;
+  width: 220px;
+  overflow-y: scroll;
+  max-height: 180px;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .sub_item_menu_item {
