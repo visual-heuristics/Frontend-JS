@@ -2,6 +2,7 @@ import React from "react";
 import {Stage, Container, Sprite, Text, useTick, Graphics} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
 import {subGoal, stepInfo, allBlocks, claw, steps} from './dataUtils';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
@@ -46,8 +47,7 @@ class PageFour extends React.Component {
             blockIndex: 0,
             stepInfoIndex: 0,
             showKey: '',
-            showPlayButton: true
-
+            showPlayButton: true,
         }
         // Every function that interfaces with UI and data used
         // in this class needs to bind like this:
@@ -95,6 +95,50 @@ class PageFour extends React.Component {
         console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
+
+    handlePreviousClick(value) {
+        console.info("handlePreviousClick", value);
+        const index = Number(value) - 1;
+        if (index < 0) {
+            alert("It's already the initial state!")
+        }
+        else{
+            this.setState({
+                blockIndex: index,
+                stepInfoIndex: index
+            });
+            console.info('DOM:', this.stepItem[index]);
+            this.stepItem[index].current.scrollIntoView();
+        }
+    }
+
+    handleNextClick(value) {
+        console.info("handleNextClick", value);
+        const index = Number(value) + 1;
+        if (index >= steps.length) {
+            alert("It's already the final state!")
+        }
+        else{
+            this.setState({
+                blockIndex: index,
+                stepInfoIndex: index
+            });
+            console.info('DOM:', this.stepItem[index]);
+            this.stepItem[index].current.scrollIntoView();
+        }
+    }
+
+    handleShowGoalClick(){
+        console.info("handleShowGoalClick");
+        const index = Number(steps.length) - 1;
+        this.setState({
+            blockIndex: index,
+            stepInfoIndex: index
+        });
+        console.info('DOM:', this.stepItem[index]);
+        this.stepItem[index].current.scrollIntoView();
+    }
+
     render() {
         return (
             <div className={styles.container}>
@@ -175,7 +219,7 @@ class PageFour extends React.Component {
                     </Stage>
                     {/*controller buttons*/}
                     <div style={{height:'50px'}}>
-                        <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}}>
+                        <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}} onClick={()=>{this.handlePreviousClick(this.state.stepInfoIndex);}}>
                             <SkipPreviousIcon fontSize="large" />
                         </IconButton>
                         <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
@@ -184,7 +228,7 @@ class PageFour extends React.Component {
                         <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
                             <PauseCircleFilledIcon fontSize="large"/>
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}}>
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleNextClick(this.state.stepInfoIndex);}}>
                             <SkipNextIcon fontSize="large" />
                         </IconButton>
                         <IconButton color="primary" style={{float:'left', marginRight:'10%', marginTop:'5px'}}>
@@ -206,6 +250,11 @@ class PageFour extends React.Component {
                 </div>
                 
                 <div className={styles.right}>
+                    <div style={{marginTop:'5px', marginBottom:'5px'}}>
+                        <Button variant="contained" color="primary" size="small" onClick={()=> {this.handleShowGoalClick()}}>
+                            Show the Goal
+                        </Button>
+                    </div>
                     <div className={styles.sub_title}>Subgoal</div>
                     <div className={styles.sub_list}>
                         {
@@ -230,3 +279,5 @@ class PageFour extends React.Component {
     );
     }
 }
+
+export default PageFour;
