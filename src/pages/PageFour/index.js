@@ -2,7 +2,14 @@ import React from "react";
 import {Stage, Container, Sprite, Text, useTick, Graphics} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
 import {subGoal, stepInfo, allBlocks, claw, steps} from './dataUtils';
-
+import IconButton from '@material-ui/core/IconButton';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import ReplayIcon from '@material-ui/icons/Replay';
+import { makeStyles } from '@material-ui/core/styles';
+import Slider from '@material-ui/core/Slider';
 import styles from './index.less';
 
 const canvasWidth_Middle = 800
@@ -12,11 +19,23 @@ const canvasHeight_Middle = 480
 
 console.info('subGoal', [...subGoal.keys()]);
 
+
+const useStyles = makeStyles({
+    root: {
+      width: 300,
+    },
+});
+  
+function valuetext(value) {
+    return `${value}`;
+}
+
 class PageFour extends React.Component {
     // init data
     constructor(props) {
         super(props);
 
+        
         this.stepItem = {};
         steps.forEach((step, i) => {
             this.stepItem[i] = React.createRef();
@@ -26,7 +45,8 @@ class PageFour extends React.Component {
             // data that will be used/changed in render function
             blockIndex: 0,
             stepInfoIndex: 0,
-            showKey: ''
+            showKey: '',
+            showPlayButton: true
 
         }
         // Every function that interfaces with UI and data used
@@ -75,7 +95,6 @@ class PageFour extends React.Component {
         console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
-
     render() {
         return (
             <div className={styles.container}>
@@ -105,7 +124,7 @@ class PageFour extends React.Component {
                 </div>
                 <div className={styles.middle}>
                     <Stage width={canvasWidth_Middle} height={canvasHeight_Middle}
-                           options={{backgroundColor: 0xffffff}} key={'main-graph'} overflow-y={'scroll'}>
+                           options={{backgroundColor: 0xffffff}} key={'main-graph'}>
                         {
                             allBlocks[this.state.blockIndex].map((block, i) => {
                                 const color = utils.rgb2hex([block.color.r, block.color.g, block.color.b])
@@ -153,9 +172,37 @@ class PageFour extends React.Component {
                                 }}
                             />
                         }
-
                     </Stage>
-                   
+                    {/*controller buttons*/}
+                    <div style={{height:'50px'}}>
+                        <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}}>
+                            <SkipPreviousIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
+                            <PlayCircleFilledIcon fontSize="large"/>
+                        </IconButton>
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
+                            <PauseCircleFilledIcon fontSize="large"/>
+                        </IconButton>
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}}>
+                            <SkipNextIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton color="primary" style={{float:'left', marginRight:'10%', marginTop:'5px'}}>
+                            <ReplayIcon fontSize="medium" />
+                        </IconButton>
+                        <ul>Speed:</ul>
+                        <Slider
+                            defaultValue={3}
+                            getAriaValueText={valuetext}
+                            aria-labelledby="speed-slider"
+                            step={1}
+                            marks
+                            min={1}
+                            max={5}
+                            valueLabelDisplay="auto"
+                            style={{width: '150px'}}     
+                        />
+                    </div>
                 </div>
                 
                 <div className={styles.right}>
@@ -182,7 +229,4 @@ class PageFour extends React.Component {
             </div>
     );
     }
-
 }
-
-export default PageFour;
