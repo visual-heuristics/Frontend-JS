@@ -6,7 +6,7 @@ import {subGoal, stepInfo, allBlocks, claw, steps} from './dataUtils';
 import styles from './index.less';
 
 const canvasWidth_Middle = 800
-const canvasHeight_Middle = 800
+const canvasHeight_Middle = 480
 // const canvasWidth_Left = 400
 // const canvasHeight_Left = 800
 
@@ -80,8 +80,8 @@ class PageFour extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.left}>
+                    <div className={styles.sub_title}> Steps </div>
                     <div className={styles.left_upper}>
-                        <div className={styles.sub_title}> Steps </div>
                         {
                             steps.map((step, i) => {
                                 return <div className={styles.stage_item}
@@ -104,11 +104,8 @@ class PageFour extends React.Component {
                     </div>
                 </div>
                 <div className={styles.middle}>
-                    <div>
-                        <button onClick={this.handleOnClick}>to homepage</button>
-                    </div>
                     <Stage width={canvasWidth_Middle} height={canvasHeight_Middle}
-                           options={{backgroundColor: 0xffffff}} key={'main-graph'}>
+                           options={{backgroundColor: 0xffffff}} key={'main-graph'} overflow-y={'scroll'}>
                         {
                             allBlocks[this.state.blockIndex].map((block, i) => {
                                 const color = utils.rgb2hex([block.color.r, block.color.g, block.color.b])
@@ -116,38 +113,41 @@ class PageFour extends React.Component {
                                 return (
                                     <>
                                         <Graphics
+                                            // draw the block
                                             key={`${i}_graphic`}
                                             draw={g => {
                                                 g.clear();
                                                 g.lineStyle(0)
                                                 g.beginFill(color, 1.0)
-                                                g.drawRect(block.x, canvasHeight_Middle - block.y - block.height, block.height, block.width)
+                                                g.drawRect(block.x/2, canvasHeight_Middle - block.y/2 - block.height/2, block.height/2, block.width/2)
                                                 g.endFill()
                                             }}
                                         />
                                         <Text
+                                            // text on the block
                                             key={`${i}_text`}
                                             text={block.name}
                                             anchor={0.5}
-                                            x={block.x + block.width / 2}
-                                            y={canvasHeight_Middle - block.y - block.height / 2}
+                                            x={block.x/2 + block.width/4}
+                                            y={canvasHeight_Middle - block.y/2 - block.height/4}
                                         />
                                     </>
                                 )
                             })
                         }
                         {
+                            // Draw the claw
                             <Graphics
                                 key={`${0}_claw`}
                                 draw={g => {
                                     g.clear();
-                                    g.lineStyle(4, 0x000000, 1)
-                                    g.moveTo(claw[0].x, canvasHeight_Middle - claw[0].y + claw[0].height / 2 + 200)
-                                    g.lineTo(claw[0].x, canvasHeight_Middle - claw[0].y + 200)
-                                    g.lineTo(claw[0].x + claw[0].width, canvasHeight_Middle - claw[0].y + 200)
-                                    g.lineTo(claw[0].x + claw[0].width, canvasHeight_Middle - claw[0].y + claw[0].height / 2 + 200)
-                                    g.moveTo(claw[0].x + claw[0].width / 2, canvasHeight_Middle - claw[0].y + 200)
-                                    g.lineTo(claw[0].x + claw[0].width / 2, canvasHeight_Middle - claw[0].y - claw[0].height / 2 + 200)
+                                    g.lineStyle(2, 0x000000, 1)
+                                    g.moveTo(claw[0].x/2, canvasHeight_Middle - claw[0].y/2 + claw[0].height/4 -10)
+                                    g.lineTo(claw[0].x/2, canvasHeight_Middle - claw[0].y/2 -10)
+                                    g.lineTo(claw[0].x/2 + claw[0].width/2, canvasHeight_Middle - claw[0].y/2 -10)
+                                    g.lineTo(claw[0].x/2 + claw[0].width/2, canvasHeight_Middle - claw[0].y/2 + claw[0].height/4 -10)
+                                    g.moveTo(claw[0].x/2 + claw[0].width/2 - 20, canvasHeight_Middle - claw[0].y/2 -10)
+                                    g.lineTo(claw[0].x/2 + claw[0].width/2 - 20, canvasHeight_Middle - claw[0].y/2 - claw[0].height/4 -10)
                                     g.moveTo(0, canvasHeight_Middle)
                                     g.lineTo(canvasWidth_Middle, canvasHeight_Middle)
                                 }}
@@ -155,7 +155,9 @@ class PageFour extends React.Component {
                         }
 
                     </Stage>
+                   
                 </div>
+                
                 <div className={styles.right}>
                     <div className={styles.sub_title}>Subgoal</div>
                     <div className={styles.sub_list}>
@@ -184,34 +186,3 @@ class PageFour extends React.Component {
 }
 
 export default PageFour;
-// export default function () {
-//     const [x, setX] = React.useState(0);
-//     const mask = React.useRef();
-//     const i = React.useRef(0);
-//
-//     useTick(delta => {
-//         i.current += 0.05 * delta;
-//         setX(Math.cos(i.current) * 100);
-//     });
-//
-//     return (
-//         <div>
-//             <div>
-//                 Hello Page four!
-//             </div>
-//             <div>
-//                 <button onClick={this.handleOnClick}>to homepage</button>
-//             </div>
-//
-//             <Stage>
-//                 <Sprite
-//                     image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png"
-//                     scale={[4, 4]}
-//                     anchor={0.5}
-//                     mask={mask.current}
-//                 />
-//
-//             </Stage>
-//         </div>
-//     );
-// }
