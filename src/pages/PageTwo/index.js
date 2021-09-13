@@ -89,9 +89,11 @@ class PageTwo extends React.Component {
             <div>
         
             <Container maxWidth="sm" component="main" className={useStyles.heroContent}>
+              <div className={css.buttonBox}>
             <Typography variant="h4" align="center" color="textPrimary" component="p">
                 Select VFG file to generate visualisation directly.
                 </Typography>
+                </div>
             </Container>
 
 
@@ -106,8 +108,8 @@ class PageTwo extends React.Component {
 
                 <Container maxWidth="sm" component="main"  marginTop="50">
                 <div className={css.buttonBox}>
-                <Button variant="contained" color="#224878" onClick={this.handleOnClick} text-align="left">Cancell</Button>
-                <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={this.handleOnClick} text-align="right">Upload File</Button>
+                <Button variant="contained" color="#224878" onClick={this.handleOnClick} >Cancell</Button>
+                <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={this.handleOnClick} >Upload File</Button>
                 </div>
                 </Container>
             </div>
