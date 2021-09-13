@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 
 const drop = {
   width: "20%",
@@ -31,12 +29,21 @@ const drop1 = {
 };
 
 class DropZone extends React.Component {
+  state = {
+    files: [],
+  };
+
   onDrop = (file) => {
-    if (file.length != 1) {
+    if (file.length !== 1) {
       alert("More than one file, retry");
     }
-    if (file.name.endsWith(this.props.fileType)) {
-      this.props.onLoad(this.props.name, file);
+    console.log(file);
+
+    if (file[0].name.endsWith(this.props.fileType)) {
+      console.log(this.state.files);
+      this.setState({ files: file });
+      console.log(this.state.files);
+      this.props.onLoad(this.props.name, file[0]);
     } else {
       console.log("wrong file type");
       alert("Wrong file type");
@@ -44,6 +51,11 @@ class DropZone extends React.Component {
   };
 
   render() {
+    let nameFile =
+      this.state.files.length > 0
+        ? this.state.files[0]
+        : { name: "", size: "" };
+
     return (
       <div style={drop}>
         <Dropzone onDrop={this.onDrop} maxFiles={"1"}>
@@ -59,8 +71,9 @@ class DropZone extends React.Component {
               <aside>
                 <h4>File:</h4>
                 <ul>
-                  <li key={file.name}>
-                    {file.name} - {file.size} bytes
+                  <li key={nameFile.name}>
+                    {nameFile.name} - {nameFile.size}
+                    bytes
                   </li>
                 </ul>
               </aside>
