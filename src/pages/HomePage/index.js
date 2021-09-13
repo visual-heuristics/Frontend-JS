@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import Home from "./home";
 import styles from './index.module.less';
 class HomePage extends React.Component {
 
@@ -25,10 +26,8 @@ class HomePage extends React.Component {
     render(){
         return (
             <div>
-                <div>
-                    Hello homepage!
-                </div>
-                <div>
+                <Home />
+                {/* <div>
                     <button onClick={()=>this.handleOnClick('1')}
                             className={styles.btn}>
                             to page 1
@@ -42,7 +41,7 @@ class HomePage extends React.Component {
                 </div>
                 <div>
                     <button onClick={()=>this.handleOnClick('4')}>to page 4</button>
-                </div>
+                </div> */}
             </div>
           );
     }
