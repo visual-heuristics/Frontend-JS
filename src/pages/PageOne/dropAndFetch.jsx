@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DragAndDrop from "./dragAndDrop";
+import DropZone from "./dropZone";
 
 class DropAndFetch extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class DropAndFetch extends React.Component {
     return (
       <div>
         {this.state.dragsAndDrops.map((drag) => (
-          <DragAndDrop
+          <DropZone
             key={drag.name}
             name={drag.name}
             type={drag.fileType}
