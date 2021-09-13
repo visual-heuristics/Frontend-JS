@@ -29,11 +29,21 @@ function getSubGoal() {
     subgoal.map((subgoalList, i) => {
         const currentStep = subgoalList[subgoalList.length-1];
         if (!map.has(currentStep)) {
-            map.set(currentStep, step.slice(i))
-        }
+            let vidualSteps = []
+            for(var i=0;i<step.length;i++){
+                for(var j=0;j<subgoal[i].length;j++){
+                    if(currentStep==subgoal[i][j]){
+                        vidualSteps.push(step[i]);
+                    }
+                }
+            }
+            map.set(currentStep, vidualSteps)
+         }
     })
+    //console.log(map)
     return map;
 }
+
 export const allBlocks = getAllBlocks();
 export const claw = getClaw();
 export const steps = getSteps();
