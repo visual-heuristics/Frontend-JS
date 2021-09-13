@@ -100,7 +100,7 @@ class PageTwo extends React.Component {
                    
                 </div>
                 
-                <DropzoneArea filesLimit={1} onChange={(files) => console.log('Files:', files)}/>
+                <DropzoneArea acceptedFiles={['.vfg']} filesLimit={1} onChange={(files) => console.log('Files:', files)}/>
                 
                 </Container>
 
