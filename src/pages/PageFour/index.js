@@ -1,7 +1,7 @@
 import React from "react";
 import {Stage, Container, Sprite, Text, useTick, Graphics} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allBlocks, claw, steps} from './dataUtils';
+import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -18,7 +18,9 @@ const canvasHeight_Middle = 480
 // const canvasWidth_Left = 400
 // const canvasHeight_Left = 800
 
-console.info('subGoal', [...subGoal.keys()]);
+// console.info('subGoal', [...subGoal.keys()]);
+//
+// console.info('stepSubgoalMap', stepSubgoalMap);
 
 
 const useStyles = makeStyles({
@@ -48,6 +50,7 @@ class PageFour extends React.Component {
             stepInfoIndex: 0,
             showKey: '',
             showPlayButton: true,
+            selectedSubGoals: {}
         }
         // Every function that interfaces with UI and data used
         // in this class needs to bind like this:
@@ -59,7 +62,7 @@ class PageFour extends React.Component {
     }
 
     handleSubItemClick(key) {
-        console.info("handleSubItemClick(), ", key);
+        //console.info("handleSubItemClick(), ", key);
         // this.state.blockIndex = index;
         if(this.state.showKey !== key) {
             this.setState({
@@ -79,20 +82,35 @@ class PageFour extends React.Component {
         // Get Stage[index] blocks, and display
         console.info("handleSwitchStage(), ", index);
         // this.state.blockIndex = index;
+
+        const highlightSubGoals = stepSubgoalMap.get(index) || [];
+        const map = {};
+        highlightSubGoals.forEach(item => {
+            map[item]=true;
+        });
+
         this.setState({
             blockIndex: index,
-            stepInfoIndex: index
+            stepInfoIndex: index,
+            selectedSubGoals: map
         });
     }
 
     handleStepClick(value) {
-        console.info("handleStepClick", value);
+        //console.info("handleStepClick", value);
         const index = Number(value);
+        const highlightSubGoals = stepSubgoalMap.get(index) || [];
+        const map = {};
+        highlightSubGoals.forEach(item => {
+            map[item]=true;
+        });
+
         this.setState({
             blockIndex: index,
-            stepInfoIndex: index
+            stepInfoIndex: index,
+            selectedSubGoals: map
         });
-        console.info('DOM:', this.stepItem[index]);
+        //console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
 
@@ -255,11 +273,14 @@ class PageFour extends React.Component {
                             Show the Goal
                         </Button>
                     </div>
-                    <div className={styles.sub_title}>Subgoal</div>
+                    <div className={styles.sub_title}>
+                        <div className={styles.sub_title_key}>Subgoal</div>
+                        <div className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/10</div>
+                    </div>
                     <div className={styles.sub_list}>
                         {
                             [...subGoal.keys()].map(key => {
-                                return <div className={styles.sub_item} key={key} onClick={()=> {this.handleSubItemClick(key)}}>
+                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : '')} key={key} onClick={()=> {this.handleSubItemClick(key)}}>
                                     {key}
                                     <div className={styles.sub_item_menu}
                                         style={{display: this.state.showKey === key ? 'block': 'none'}}>

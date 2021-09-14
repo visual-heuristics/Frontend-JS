@@ -40,16 +40,24 @@ function getSubGoal() {
             map.set(currentStep, vidualSteps)
          }
     })
-    //console.log(map)
     return map;
 }
 
+function getStepSubgoalMap() {
+    let map = new Map();
+    const steps = d.subgoalMap.m_keys;
+    const subgoalList = d.subgoalMap.m_values;
+    steps.map((step, i) => {
+        map.set(step, subgoalList[i])
+    })
+    return map;
+}
 export const allBlocks = getAllBlocks();
 export const claw = getClaw();
 export const steps = getSteps();
 export const stepInfo =  getStepInfo();
 export const subGoal = getSubGoal();
-
+export const stepSubgoalMap = getStepSubgoalMap();
 //export default null;
 
 
