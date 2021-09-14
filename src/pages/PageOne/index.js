@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+
 const container = {
 	width: "100%",
 	height: "100%",
@@ -13,7 +14,7 @@ const container = {
 const header = {
 	width: "100%",
 	height: "50px",
-	backgroundColor: "#52bad5"
+	backgroundColor: "#20477A"
 }
 
 const subtitle = {
@@ -61,7 +62,7 @@ class PageOne extends React.Component {
                 margin: theme.spacing(1),
                 width: '25ch',
               },
-            },
+            },         
           }));
 
 
@@ -70,13 +71,11 @@ class PageOne extends React.Component {
                 <div style={header}>
                     <h3 style={subtitle}>Build Visualisation From Problem</h3>
                 </div>
-
                 <div>
                     <h3 style={text}>
                         Option 1 - Planner URL
                     </h3>
-                </div>
-                
+                </div>               
                 <form className={useStyles.root} noValidate autoComplete="off">
                     <div style={text}>
                         <TextField id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '45%'}}/>
@@ -86,17 +85,13 @@ class PageOne extends React.Component {
                             Paste
                         </Button>
                     </div>
-                </form>
-           
-
+                </form>          
                 <div style={{marginTop:"5%"}}>
                     <h3 style={text}>
                         Option 2 - Upload Problem Domain and Animation Profile Files
                     </h3>
-                </div>
-                
-                <DropAndFetch onClick={this.handleOnClick}/>
-                
+                </div>               
+                <DropAndFetch onClick={this.handleOnClick}/>              
             </div>
             
           );

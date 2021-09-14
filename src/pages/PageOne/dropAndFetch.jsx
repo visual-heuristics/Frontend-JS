@@ -1,34 +1,9 @@
-import React, { Component } from "react";
-//import DragAndDrop from "./dragAndDrop";
+import React from "react";
 import DropZone from "./dropZone";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-
-const btnCancel = {
-  width: "25%",
-  height: "30px",
-  fontWeight: "bold",
-  marginTop: "2%",
-  marginRight: "5%",
-  marginLeft: "2%",
-};
-
-const btnContinue = {
-  width: "25%",
-  height: "30px",
-  fontWeight: "bold",
-  marginTop: "2%",
-  marginLeft: "1%",
-};
-
-const section = {
-  width: "25%",
-  height: "35%",
-  textAlign: "left",
-  float: "left",
-  marginLeft: "4%",
-};
+import Container from "@material-ui/core/Container";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import css from "./index.module.less";
 
 class DropAndFetch extends React.Component {
   constructor(props) {
@@ -38,9 +13,17 @@ class DropAndFetch extends React.Component {
 
   state = {
     dragsAndDrops: [
-      { name: "domain", fileType: ".pddl" },
-      { name: "problem", fileType: ".pddl" },
-      { name: "animation", fileType: ".pddl" },
+      { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
+      {
+        name: "Problem",
+        fileType: ".pddl",
+        desc: "for objects, initial state and goal.",
+      },
+      {
+        name: "Animation",
+        fileType: ".pddl",
+        desc: "object is representation.",
+      },
     ],
   };
 
@@ -81,7 +64,7 @@ class DropAndFetch extends React.Component {
     }
   };
 
-  handleLoad = (name, file) => {
+  handleFileLoad = (name, file) => {
     this.datas[name] = file;
   };
 
@@ -89,44 +72,36 @@ class DropAndFetch extends React.Component {
     return (
       <React.Fragment>
         <div>
-          <div style={section}>
-            <h2>Domain File</h2>
-            <p>For predicates and actions</p>
-            <h2>Problem File</h2>
-            <p>For objects, initial state and goal</p>
-            <h2>Animation File</h2>
-            <p>Object is representation</p>
-          </div>
-
-          {this.state.dragsAndDrops.map((drag) => (
-            <DropZone
-              key={drag.name}
-              name={drag.name}
-              fileType={drag.fileType}
-              onLoad={this.handleLoad}
-            />
-          ))}
-        </div>
-
-        <div>
-          <Button
-            style={btnCancel}
-            variant="contained"
-            color="primary"
-            size="medium"
-            onClick={() => this.props.onClick()}
-          >
-            CANCEL
-          </Button>
-          <Button
-            style={btnContinue}
-            variant="contained"
-            color="primary"
-            size="medium"
-            onClick={this.handleSubmit}
-          >
-            CONTINUE
-          </Button>
+          <Container component="main" className={css.dropareaBox}>
+            {this.state.dragsAndDrops.map((drag) => (
+              <DropZone
+                key={drag.name}
+                name={drag.name}
+                desc={drag.desc}
+                fileType={drag.fileType}
+                onFileLoad={this.handleFileLoad}
+              />
+            ))}
+          </Container>
+          <Container maxWidth="sm" component="main" marginTop="50">
+            <div className={css.buttonBox}>
+              <Button
+                variant="contained"
+                color="#224878"
+                onClick={() => this.props.onClick()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CloudUploadIcon />}
+                onClick={this.handleSubmit}
+              >
+                Upload File
+              </Button>
+            </div>
+          </Container>
         </div>
       </React.Fragment>
     );

@@ -1,32 +1,7 @@
-import React, { Component } from "react";
-import Dropzone from "react-dropzone";
-import { makeStyles } from "@material-ui/core/styles";
-
-const drop = {
-  width: "20%",
-  height: "35%",
-  float: "left",
-};
-
-const section1 = {
-  width: "80%",
-  height: "270px",
-  float: "center",
-  backgroundColor: "#FFFFFF",
-  padding: "10px",
-  borderStyle: "dotted",
-  marginTop: "1%",
-  marginRight: "20%",
-  marginLeft: "20%",
-};
-
-const drop1 = {
-  width: "98%",
-  height: "150px",
-  float: "center",
-  backgroundColor: "#eeeeee",
-  borderStyle: "dotted",
-};
+import React from "react";
+import css from "./index.module.less";
+import { DropzoneArea } from "material-ui-dropzone";
+import Typography from "@material-ui/core/Typography";
 
 class DropZone extends React.Component {
   state = {
@@ -43,43 +18,40 @@ class DropZone extends React.Component {
       console.log(this.state.files);
       this.setState({ files: file });
       console.log(this.state.files);
-      this.props.onLoad(this.props.name, file[0]);
+      this.props.onFileLoad(this.props.name, file[0]);
     } else {
-      console.log("wrong file type");
+      console.log("Wrong file type");
       alert("Wrong file type");
     }
   };
 
   render() {
-    let nameFile =
+    let dropText =
       this.state.files.length > 0
-        ? this.state.files[0]
-        : { name: "", size: "" };
+        ? this.state.files[0].name
+        : "Drag and drop " +
+          this.props.name.toLowerCase() +
+          this.props.fileType +
+          " here or click";
 
     return (
-      <div style={drop}>
-        <Dropzone onDrop={this.onDrop} maxFiles={"1"}>
-          {({ getRootProps, getInputProps }) => (
-            <section style={section1}>
-              <div {...getRootProps()} style={drop1}>
-                <input {...getInputProps()} />
-                <p>
-                  Drag and drop {this.props.name + this.props.fileType} here, or
-                  click to select file
-                </p>
-              </div>
-              <aside>
-                <h4>File:</h4>
-                <ul>
-                  <li key={nameFile.name}>
-                    {nameFile.name} - {nameFile.size}
-                    bytes
-                  </li>
-                </ul>
-              </aside>
-            </section>
-          )}
-        </Dropzone>
+      <div className={css.dropzoneBox}>
+        <Typography
+          variant="h6"
+          align="center"
+          color="textPrimary"
+          component="p"
+        >
+          <b>{this.props.name} File </b>
+          <br />
+          {this.props.desc}
+        </Typography>
+        <DropzoneArea
+          acceptedFiles={[".pddl"]}
+          filesLimit={1}
+          onDrop={(file) => this.onDrop(file)}
+          dropzoneText={dropText}
+        />
       </div>
     );
   }
