@@ -98,7 +98,7 @@ class DropAndFetch extends React.Component {
                 startIcon={<CloudUploadIcon />}
                 onClick={this.handleSubmit}
               >
-                Upload File
+                Upload Files
               </Button>
             </div>
           </Container>

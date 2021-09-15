@@ -32,8 +32,8 @@ const subtitle = {
 const text = {
     textAlign: 'left',
     marginTop: '2%',
-    marginLeft: '4%',
-    marginRight: '50%'
+    marginLeft: '25%',
+    marginRight: '25%'
 }
 
 class PageOne extends React.Component {
@@ -78,7 +78,7 @@ class PageOne extends React.Component {
                 </div>               
                 <form className={useStyles.root} noValidate autoComplete="off">
                     <div style={text}>
-                        <TextField id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '45%'}}/>
+                        <TextField id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '10%'}}/>
                     </div>
                     <div style={{float: 'left', marginLeft: '1%', alignItems: 'center'}}>
                         <Button variant="contained" color="primary" size="medium">
