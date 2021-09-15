@@ -44,7 +44,9 @@ class PageFour extends React.Component {
             showKey: '',
             showPlayButton: true,
             selectedSubGoals: {},
-            drawBlocks: allBlocks[0]
+            drawBlocks: allBlocks[0],
+            playButtonColor: 'primary',
+            pauseButtonColor: 'default'
         }
 
         // Every function that interfaces with UI and data used
@@ -231,7 +233,9 @@ class PageFour extends React.Component {
         this.setState( {
             blockIndex: nextIndex,
             stepInfoIndex: nextIndex,
-            selectedSubGoals: map
+            selectedSubGoals: map,
+            playButtonColor: 'default',
+            pauseButtonColor: 'primary'
         })
         this.stepItem[nextIndex].current.scrollIntoView();
 
@@ -262,6 +266,10 @@ class PageFour extends React.Component {
 
     handlePauseClick() {
         if(this.handlerPlay) {
+            this.setState( {
+                playButtonColor: 'primary',
+                pauseButtonColor: 'default'
+            })
             clearInterval(this.handlerPlay);
         }
     }
@@ -381,10 +389,10 @@ class PageFour extends React.Component {
                         <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}} onClick={()=>{this.handlePreviousClick(this.state.stepInfoIndex);}}>
                             <SkipPreviousIcon fontSize="large" />
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleStartClick(this.state.stepInfoIndex);}}>
+                        <IconButton color={this.state.playButtonColor} style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleStartClick(this.state.stepInfoIndex);}}>
                             <PlayCircleFilledIcon fontSize="large"/>
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handlePauseClick(this.state.stepInfoIndex);}}>
+                        <IconButton color={this.state.pauseButtonColor} style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handlePauseClick(this.state.stepInfoIndex);}}>
                             <PauseCircleFilledIcon fontSize="large"/>
                         </IconButton>
                         <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleNextClick(this.state.stepInfoIndex);}}>
