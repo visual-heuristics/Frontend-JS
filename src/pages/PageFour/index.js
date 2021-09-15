@@ -214,7 +214,7 @@ class PageFour extends React.Component {
     handleNextClick(value) {
         //console.info("handleNextClick", value);
         const nextIndex = Number(value) + 1
-        if (nextIndex>= steps.length - 1) {
+        if (nextIndex >= steps.length) {
             alert("It's already the final state!")
         }
         else{
