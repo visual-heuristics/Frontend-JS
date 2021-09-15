@@ -165,7 +165,9 @@ class PageFour extends React.Component {
         this.setState({
             blockIndex: index,
             stepInfoIndex: index,
-            selectedSubGoals: map
+            selectedSubGoals: map,
+            playButtonColor: 'primary',
+            pauseButtonColor: 'default'
         });
     }
 
@@ -182,7 +184,9 @@ class PageFour extends React.Component {
         this.setState({
             blockIndex: index,
             stepInfoIndex: index,
-            selectedSubGoals: map
+            selectedSubGoals: map,
+            playButtonColor: 'primary',
+            pauseButtonColor: 'default'
         });
         //console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
@@ -275,25 +279,35 @@ class PageFour extends React.Component {
     }
 
     handleResetClick() {
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
         this.diff(0)
         const map = this.highlight(0)
         this.setState( {
             blockIndex: 0,
             stepInfoIndex: 0,
-            selectedSubGoals: map
+            selectedSubGoals: map,
+            playButtonColor: 'primary',
+            pauseButtonColor: 'default'
         })
         this.stepItem[0].current.scrollIntoView();
     }
 
     handleShowGoalClick(){
         //console.info("handleShowGoalClick");
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
         const index = Number(steps.length) - 1;
         this.diff(index)
         const map = this.highlight(index)
         this.setState( {
             blockIndex: index,
             stepInfoIndex: index,
-            selectedSubGoals: map
+            selectedSubGoals: map,
+            playButtonColor: 'primary',
+            pauseButtonColor: 'default'
         })
        // console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
