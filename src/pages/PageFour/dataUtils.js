@@ -52,6 +52,16 @@ function getStepSubgoalMap() {
     })
     return map;
 }
+
+
+function getInitialBlocksPos() {
+    const initialPos = {}
+    const blocks = d.visualStages[0].visualSprites.filter(s => s.prefabimage === "img-block");
+    blocks.map((block, i) => {
+        initialPos[block.name] = [block.x/2, block.y/2]
+    })
+    return initialPos;
+}
 export const allBlocks = getAllBlocks();
 export const claw = getClaw();
 export const steps = getSteps();
@@ -60,4 +70,5 @@ export const subGoal = getSubGoal();
 export const stepSubgoalMap = getStepSubgoalMap();
 //export default null;
 
+export const initialPos = getInitialBlocksPos();
 
