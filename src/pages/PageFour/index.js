@@ -15,13 +15,6 @@ import styles from './index.less';
 
 const canvasWidth_Middle = 800
 const canvasHeight_Middle = 480
-// const canvasWidth_Left = 400
-// const canvasHeight_Left = 800
-
-// console.info('subGoal', [...subGoal.keys()]);
-//
-// console.info('stepSubgoalMap', stepSubgoalMap);
-
 
 const useStyles = makeStyles({
     root: {
@@ -51,8 +44,6 @@ class PageFour extends React.Component {
             showKey: '',
             showPlayButton: true,
             selectedSubGoals: {},
-            // previousMap: {},
-            // currentMap: initialPos,
             drawBlocks: allBlocks[0]
         }
 
@@ -162,9 +153,10 @@ class PageFour extends React.Component {
 
     handleSwitchStage(index) {
         // Get Stage[index] blocks, and display
-        console.info("handleSwitchStage(), ", index);
-        // this.state.blockIndex = index;
-
+        //console.info("handleSwitchStage(), ", index);
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
         this.diff(index)
         const map = this.highlight(index)
 
@@ -176,7 +168,10 @@ class PageFour extends React.Component {
     }
 
     handleStepClick(value) {
-        console.info("handleStepClick", value);
+        //console.info("handleStepClick", value);
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
         const index = Number(value);
 
         this.diff(index)
@@ -229,13 +224,69 @@ class PageFour extends React.Component {
         }
     }
 
+    handleStartClick(value) {
+        let nextIndex = Number(value) + 1
+        this.diff(nextIndex)
+        const map = this.highlight(nextIndex)
+        this.setState( {
+            blockIndex: nextIndex,
+            stepInfoIndex: nextIndex,
+            selectedSubGoals: map
+        })
+        this.stepItem[nextIndex].current.scrollIntoView();
+
+        nextIndex++;
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
+        if(steps.length > nextIndex) {
+            const handlerPlay = setInterval(()=>{
+                this.diff(nextIndex)
+                const map = this.highlight(nextIndex)
+                this.setState( {
+                    blockIndex: nextIndex,
+                    stepInfoIndex: nextIndex,
+                    selectedSubGoals: map
+                })
+                this.stepItem[nextIndex].current.scrollIntoView();
+
+                nextIndex++;
+
+                if(nextIndex >= steps.length) {
+                    clearInterval(handlerPlay);
+                }
+            }, 2100);
+            this.handlerPlay = handlerPlay;
+        }
+    }
+
+    handlePauseClick() {
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
+    }
+
+    handleResetClick() {
+        this.diff(0)
+        const map = this.highlight(0)
+        this.setState( {
+            blockIndex: 0,
+            stepInfoIndex: 0,
+            selectedSubGoals: map
+        })
+        this.stepItem[0].current.scrollIntoView();
+    }
+
     handleShowGoalClick(){
-        console.info("handleShowGoalClick");
+        //console.info("handleShowGoalClick");
         const index = Number(steps.length) - 1;
-        this.setState({
+        this.diff(index)
+        const map = this.highlight(index)
+        this.setState( {
             blockIndex: index,
-            stepInfoIndex: index
-        });
+            stepInfoIndex: index,
+            selectedSubGoals: map
+        })
        // console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
@@ -330,16 +381,16 @@ class PageFour extends React.Component {
                         <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}} onClick={()=>{this.handlePreviousClick(this.state.stepInfoIndex);}}>
                             <SkipPreviousIcon fontSize="large" />
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleStartClick(this.state.stepInfoIndex);}}>
                             <PlayCircleFilledIcon fontSize="large"/>
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} >
+                        <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handlePauseClick(this.state.stepInfoIndex);}}>
                             <PauseCircleFilledIcon fontSize="large"/>
                         </IconButton>
                         <IconButton color="primary" style={{float:'left', marginRight:'6%'}} onClick={()=>{this.handleNextClick(this.state.stepInfoIndex);}}>
                             <SkipNextIcon fontSize="large" />
                         </IconButton>
-                        <IconButton color="primary" style={{float:'left', marginRight:'10%', marginTop:'5px'}}>
+                        <IconButton color="primary" style={{float:'left', marginRight:'10%', marginTop:'5px'}} onClick={()=>{this.handleResetClick(this.state.stepInfoIndex);}}>
                             <ReplayIcon fontSize="medium" />
                         </IconButton>
                         <ul>Speed:</ul>
