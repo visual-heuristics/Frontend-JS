@@ -52,7 +52,7 @@ class PageFour extends React.Component {
             showPlayButton: true,
             selectedSubGoals: {},
             // previousMap: {},
-            currentMap: initialPos,
+            // currentMap: initialPos,
             drawBlocks: allBlocks[0]
         }
 
@@ -82,23 +82,16 @@ class PageFour extends React.Component {
     componentDidMount() {
     }
 
-    handleSwitchStage(index) {
-        // Get Stage[index] blocks, and display
-        console.info("handleSwitchStage(), ", index);
-        // this.state.blockIndex = index;
-
+    highlight(index) {
         const highlightSubGoals = stepSubgoalMap.get(index) || [];
         const map = {};
         highlightSubGoals.forEach(item => {
             map[item]=true;
         });
+        return map;
+    }
 
-        this.setState({
-            blockIndex: index,
-            stepInfoIndex: index,
-            selectedSubGoals: map
-        });
-
+    diff(index) {
         // 2 sets of blocks
         const previousBlockIndex = this.state.blockIndex;
         const previousBlocks = allBlocks[previousBlockIndex];
@@ -130,9 +123,12 @@ class PageFour extends React.Component {
                 movedBlocks[eachBlock.name] = changingPos
             }
         })
-        console.log(movedBlocks)
+        //console.log(movedBlocks)
         // draw 100 times, during 2 seconds, slash: 20ms
         let i = 0;
+        if(this.handler) {
+            clearInterval(this.handler);
+        }
         const handler = setInterval(()=>{
             const newDrawBlocks = previousBlocks.map( block => {
                 // block -> block.id
@@ -153,24 +149,38 @@ class PageFour extends React.Component {
             this.setState({
                 drawBlocks: [...newDrawBlocks]
             });
-
             i++;
-            console.info(i, newDrawBlocks);
+            //console.info(i, newDrawBlocks);
 
             if( i >= 40){
                 clearInterval(handler);
+                this.handler = false;
             }
         }, 50);
+        this.handler = handler;
+    };
+
+    handleSwitchStage(index) {
+        // Get Stage[index] blocks, and display
+        console.info("handleSwitchStage(), ", index);
+        // this.state.blockIndex = index;
+
+        this.diff(index)
+        const map = this.highlight(index)
+
+        this.setState({
+            blockIndex: index,
+            stepInfoIndex: index,
+            selectedSubGoals: map
+        });
     }
 
     handleStepClick(value) {
-        //console.info("handleStepClick", value);
+        console.info("handleStepClick", value);
         const index = Number(value);
-        const highlightSubGoals = stepSubgoalMap.get(index) || [];
-        const map = {};
-        highlightSubGoals.forEach(item => {
-            map[item]=true;
-        });
+
+        this.diff(index)
+        const map = this.highlight(index)
 
         this.setState({
             blockIndex: index,
@@ -182,34 +192,40 @@ class PageFour extends React.Component {
     }
 
     handlePreviousClick(value) {
-        console.info("handlePreviousClick", value);
-        const index = Number(value) - 1;
-        if (index < 0) {
+        //console.info("handlePreviousClick", value);
+        const previousIndex = Number(value) - 1;
+        if (previousIndex < 0) {
             alert("It's already the initial state!")
         }
         else{
+            this.diff(previousIndex)
+            const map = this.highlight(previousIndex)
             this.setState({
-                blockIndex: index,
-                stepInfoIndex: index
+                blockIndex: previousIndex,
+                stepInfoIndex: previousIndex,
+                selectedSubGoals: map
             });
-            console.info('DOM:', this.stepItem[index]);
-            this.stepItem[index].current.scrollIntoView();
+            //console.info('DOM:', this.stepItem[index]);
+            this.stepItem[previousIndex].current.scrollIntoView();
         }
     }
 
     handleNextClick(value) {
-        console.info("handleNextClick", value);
-        const index = Number(value) + 1;
-        if (index >= steps.length) {
+        //console.info("handleNextClick", value);
+        const nextIndex = Number(value) + 1
+        if (nextIndex>= steps.length - 1) {
             alert("It's already the final state!")
         }
         else{
+            this.diff(nextIndex)
+            const map = this.highlight(nextIndex)
             this.setState({
-                blockIndex: index,
-                stepInfoIndex: index
+                blockIndex: nextIndex,
+                stepInfoIndex: nextIndex,
+                selectedSubGoals: map
             });
-            console.info('DOM:', this.stepItem[index]);
-            this.stepItem[index].current.scrollIntoView();
+           // console.info('DOM:', this.stepItem[index]);
+            this.stepItem[nextIndex].current.scrollIntoView();
         }
     }
 
@@ -220,7 +236,7 @@ class PageFour extends React.Component {
             blockIndex: index,
             stepInfoIndex: index
         });
-        console.info('DOM:', this.stepItem[index]);
+       // console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
 
