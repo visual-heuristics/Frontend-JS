@@ -1,7 +1,7 @@
 import React from "react";
 import {Stage, Container, Sprite, Text, useTick, Graphics} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap} from './dataUtils';
+import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap,initialPos} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -50,8 +50,12 @@ class PageFour extends React.Component {
             stepInfoIndex: 0,
             showKey: '',
             showPlayButton: true,
-            selectedSubGoals: {}
+            selectedSubGoals: {},
+            // previousMap: {},
+            currentMap: initialPos,
+            drawBlocks: allBlocks[0]
         }
+
         // Every function that interfaces with UI and data used
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -94,6 +98,69 @@ class PageFour extends React.Component {
             stepInfoIndex: index,
             selectedSubGoals: map
         });
+
+        // 2 sets of blocks
+        const previousBlockIndex = this.state.blockIndex;
+        const previousBlocks = allBlocks[previousBlockIndex];
+        const newBlocks = allBlocks[index];
+
+        // Differ 2 sets of blocks
+        // - find out, different blocks;
+        // - blockId | blockIndex
+        // - blockId => src, x1, y1, dest, x2, y2
+        // - blockId => xn, yn: x1 + (x2-x1)/10 * n, ...
+        // - blockId => xn, yn
+        // - [{blockId1: [xn, yn], blockId2: [xn, yn]},
+        // {},
+        // {}
+        // ]
+        // => movedBlocks
+        const movedBlocks = {};
+        previousBlocks.map((eachBlock, i) => {
+            if(eachBlock.x !== newBlocks[i].x || eachBlock.y !== newBlocks[i].y) {
+                // 10
+                // { blockId => [{x:x1,y:y1}, {x: x2, y: y2}, , x3, .... x10] }
+                const changingPos = [];
+                for (let j = 0; j < 40; j++) {
+                    const specificPos = {}
+                    specificPos.x = eachBlock.x + (newBlocks[i].x - eachBlock.x)/40 * (j + 1)
+                    specificPos.y = eachBlock.y + (newBlocks[i].y - eachBlock.y)/40 * (j + 1)
+                    changingPos.push(specificPos)
+                }
+                movedBlocks[eachBlock.name] = changingPos
+            }
+        })
+        console.log(movedBlocks)
+        // draw 100 times, during 2 seconds, slash: 20ms
+        let i = 0;
+        const handler = setInterval(()=>{
+            const newDrawBlocks = previousBlocks.map( block => {
+                // block -> block.id
+                if(movedBlocks[block.name]) {
+                    const move = movedBlocks[block.name];
+                    // I need to move
+                    // Replace old x, y, with computed x, y (which will change per 20ms)
+                    return {
+                        ...block,
+                        x: move[i].x,
+                        y: move[i].y
+                    }
+                } else {
+                    // Keep at original position
+                    return block;
+                }
+            })
+            this.setState({
+                drawBlocks: [...newDrawBlocks]
+            });
+
+            i++;
+            console.info(i, newDrawBlocks);
+
+            if( i >= 40){
+                clearInterval(handler);
+            }
+        }, 50);
     }
 
     handleStepClick(value) {
@@ -157,7 +224,12 @@ class PageFour extends React.Component {
         this.stepItem[index].current.scrollIntoView();
     }
 
+
+
     render() {
+        // drawBlocks
+        const drawBlocks = this.state.drawBlocks;
+
         return (
             <div className={styles.container}>
                 <div className={styles.left}>
@@ -188,7 +260,9 @@ class PageFour extends React.Component {
                     <Stage width={canvasWidth_Middle} height={canvasHeight_Middle}
                            options={{backgroundColor: 0xffffff}} key={'main-graph'}>
                         {
-                            allBlocks[this.state.blockIndex].map((block, i) => {
+                            drawBlocks.map((block, i) => {
+                                // if()
+                                // currentBlockPos[block.name] = [block.x/2, block.y/2]
                                 const color = utils.rgb2hex([block.color.r, block.color.g, block.color.b])
                                 //console.log(block)
                                 return (
@@ -280,14 +354,15 @@ class PageFour extends React.Component {
                     <div className={styles.sub_list}>
                         {
                             [...subGoal.keys()].map(key => {
-                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : '')} key={key} onClick={()=> {this.handleSubItemClick(key)}}>
+                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : '')}
+                                            key={key} onClick={()=> {this.handleSubItemClick(key)}}>
                                     {key}
                                     <div className={styles.sub_item_menu}
                                         style={{display: this.state.showKey === key ? 'block': 'none'}}>
                                         {subGoal.get(key).map(value => {
                                             return <div className={styles.sub_item_menu_item}
                                                         onClick={()=>this.handleStepClick(value)}
-                                                        key={key}
+                                                        key={key + value}
                                             >Step {value}</div>
                                         })}
                                     </div>
