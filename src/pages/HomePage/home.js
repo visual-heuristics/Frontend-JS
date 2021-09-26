@@ -60,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
     color:"#FFFFFF",
     
   },
+
+  itemTitle: {
+    whiteSpace: 'pre-wrap'
+  },
   cardPricing: {
     display: 'flex',
     justifyContent: 'center',
@@ -80,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const tiers = [
   {
-    title: 'Porblem',
+    title: 'Problem',
     pageNo: 1,
     description: ['Build visualisation from problem'],
     buttonText: 'Sign up for free',
@@ -89,7 +93,7 @@ const tiers = [
   {
     title: 'VFG',
     pageNo: 2,
-    description: ['Build visualisation from VFG'],
+    description: ['Build visualisation from \nVFG'],
     buttonText: 'Sign up for free',
     buttonVariant: 'outlined',
   },
@@ -100,13 +104,13 @@ const tiers = [
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
   },
-  {
-    title: 'Demo',
-    pageNo: 4,
-    description: ['Demo File for visualisation',""],
-    buttonText: 'Sign up for free',
-    buttonVariant: 'outlined',
-  },
+  // {
+  //   title: 'Demo',
+  //   pageNo: 4,
+  //   description: ['Demo File for visualisation',""],
+  //   buttonText: 'Sign up for free',
+  //   buttonVariant: 'outlined',
+  // },
 ];
 // const footers = [
 //   {
@@ -156,7 +160,7 @@ export default function Home() {
         <Grid container spacing={4} alignItems="stretch" direction="row">
           {tiers.map((tier) => (
             // Enterprise card is full width at sm breakpoint
-            <Grid item key={tier.title} xs={3} sm={tier.title === 'Enterprise' ? 12 : 3} md={3}>
+            <Grid item key={tier.title} xs={4} sm={tier.title === 'Enterprise' ? 12 : 4} md={4}>
               <Card>
                 <CardHeader
                   title={tier.title}
@@ -177,7 +181,7 @@ export default function Home() {
                       /mo
                     </Typography>
                   </div> */}
-                  <ul>
+                  <ul className={classes.itemTitle}>
                     {tier.description.map((line) => (
                       <Typography component="li" variant="subtitle1" align="center" key={line}>
                         {line}

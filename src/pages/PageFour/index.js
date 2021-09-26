@@ -1,7 +1,7 @@
 import React from "react";
-import {Stage, Container, Sprite, Text, useTick, Graphics} from '@inlet/react-pixi';
+import {Stage, Text, Graphics} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap,initialPos} from './dataUtils';
+import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -30,7 +30,6 @@ class PageFour extends React.Component {
     // init data
     constructor(props) {
         super(props);
-
         
         this.stepItem = {};
         steps.forEach((step, i) => {
@@ -45,6 +44,7 @@ class PageFour extends React.Component {
             showPlayButton: true,
             selectedSubGoals: {},
             drawBlocks: allBlocks[0],
+            playSpeed: 3,
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         }
@@ -107,10 +107,10 @@ class PageFour extends React.Component {
                 // 10
                 // { blockId => [{x:x1,y:y1}, {x: x2, y: y2}, , x3, .... x10] }
                 const changingPos = [];
-                for (let j = 0; j < 40; j++) {
+                for (let j = 0; j < 50; j++) {
                     const specificPos = {}
-                    specificPos.x = eachBlock.x + (newBlocks[i].x - eachBlock.x)/40 * (j + 1)
-                    specificPos.y = eachBlock.y + (newBlocks[i].y - eachBlock.y)/40 * (j + 1)
+                    specificPos.x = eachBlock.x + (newBlocks[i].x - eachBlock.x)/50 * (j + 1)
+                    specificPos.y = eachBlock.y + (newBlocks[i].y - eachBlock.y)/50 * (j + 1)
                     changingPos.push(specificPos)
                 }
                 movedBlocks[eachBlock.name] = changingPos
@@ -145,11 +145,11 @@ class PageFour extends React.Component {
             i++;
             //console.info(i, newDrawBlocks);
 
-            if( i >= 40){
+            if( i >= 50){
                 clearInterval(handler);
                 this.handler = false;
             }
-        }, 50);
+        }, 60/this.state.playSpeed);
         this.handler = handler;
     };
 
@@ -232,39 +232,52 @@ class PageFour extends React.Component {
 
     handleStartClick(value) {
         let nextIndex = Number(value) + 1
-        this.diff(nextIndex)
-        const map = this.highlight(nextIndex)
-        this.setState( {
-            blockIndex: nextIndex,
-            stepInfoIndex: nextIndex,
-            selectedSubGoals: map,
-            playButtonColor: 'default',
-            pauseButtonColor: 'primary'
-        })
-        this.stepItem[nextIndex].current.scrollIntoView();
+        if(nextIndex === steps.length) {
+            alert("It's already the final state!")
+        } else {
+            this.diff(nextIndex)
+            const map = this.highlight(nextIndex)
+            this.setState({
+                blockIndex: nextIndex,
+                stepInfoIndex: nextIndex,
+                selectedSubGoals: map,
+                playButtonColor: 'default',
+                pauseButtonColor: 'primary'}
+            )
+            this.stepItem[nextIndex].current.scrollIntoView();
 
-        nextIndex++;
-        if(this.handlerPlay) {
-            clearInterval(this.handlerPlay);
-        }
-        if(steps.length > nextIndex) {
-            const handlerPlay = setInterval(()=>{
-                this.diff(nextIndex)
-                const map = this.highlight(nextIndex)
-                this.setState( {
-                    blockIndex: nextIndex,
-                    stepInfoIndex: nextIndex,
-                    selectedSubGoals: map
-                })
-                this.stepItem[nextIndex].current.scrollIntoView();
+            nextIndex++;
+            if(this.handlerPlay) {
+                clearInterval(this.handlerPlay);
+            }
+            if(steps.length > nextIndex) {
+                const run = () => {
+                    this.diff(nextIndex)
+                    const map = this.highlight(nextIndex)
+                    this.setState({
+                        blockIndex: nextIndex,
+                        stepInfoIndex: nextIndex,
+                        selectedSubGoals: map
+                    })
+                    this.stepItem[nextIndex].current.scrollIntoView();
 
-                nextIndex++;
+                    nextIndex++;
 
-                if(nextIndex >= steps.length) {
-                    clearInterval(handlerPlay);
-                }
-            }, 2100);
-            this.handlerPlay = handlerPlay;
+                    if (nextIndex >= steps.length) {
+                        if(this.handlerPlay) {
+                            clearTimeout(this.handlerPlay);
+                        }
+                    } else {
+                        // setInterval effect
+                        // detect change of playSpeed
+                        const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                        this.handlerPlay = handlerPlay;
+                    }
+                };
+
+                const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                this.handlerPlay = handlerPlay;
+            }
         }
     }
 
@@ -313,6 +326,12 @@ class PageFour extends React.Component {
         this.stepItem[index].current.scrollIntoView();
     }
 
+    handleSpeedScroll(value){
+        // console.info(value);
+        this.setState({
+            playSpeed: value
+        })
+    }
 
 
     render() {
@@ -416,7 +435,7 @@ class PageFour extends React.Component {
                             <ReplayIcon fontSize="medium" />
                         </IconButton>
                         <ul>Speed:</ul>
-                        <Slider
+                        <Slider onChange={(event, newValue) => {this.handleSpeedScroll(newValue);}}
                             defaultValue={3}
                             getAriaValueText={valuetext}
                             aria-labelledby="speed-slider"
@@ -425,7 +444,8 @@ class PageFour extends React.Component {
                             min={1}
                             max={5}
                             valueLabelDisplay="auto"
-                            style={{width: '150px'}}     
+                            style={{width: '150px'}}
+                           // onChangeCommitted={this.handleSpeedScroll()}
                         />
                     </div>
                 </div>
@@ -438,7 +458,7 @@ class PageFour extends React.Component {
                     </div>
                     <div className={styles.sub_title}>
                         <div className={styles.sub_title_key}>Subgoal</div>
-                        <div className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/10</div>
+                        <div className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/{subGoal.size}</div>
                     </div>
                     <div className={styles.sub_list}>
                         {
