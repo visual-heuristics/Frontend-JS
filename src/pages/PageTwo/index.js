@@ -69,18 +69,58 @@ class PageTwo extends React.Component {
 
         this.state = {
             // data that will be used/changed in render function
-
+            files: []
         }
         // Every function that interfaces with UI and data used 
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
     }
 
+    readFileContent(fileHandler) {
+        if(!FileReader) {
+            alert('Browser not support FileReader object');
+            this.setState({
+                Files: []
+            });
+            return;
+        }
+
+        if(!fileHandler.name.toLowerCase().endsWith('.vfg')) {
+            alert('Please choose *.vfg file to continue process');
+            this.setState({
+                Files: []
+            });
+            return;
+        }
+
+        this.setState({
+            Files: [fileHandler]
+        });
+
+        const reader = new FileReader();
+        reader.onload = function fileReadCompleted() {
+            // 当读取完成时，内容只在`reader.result`中
+            let content = reader.result || '';
+            console.log("Content of file: ", content);
+
+            // Save content for page four
+            localStorage.setItem('fileContent', content);
+        };
+        reader.readAsText(fileHandler);
+    }
+
     handleOnClick() {
         this.props.history.push('/')
     }
 
+    handleFileChange(files) {
+        console.info("files: ", files);
+        const fileHandler = files[0];
 
+        if(fileHandler) {
+            this.readFileContent(fileHandler);
+        }
+    }
     
 
     render() {
@@ -100,14 +140,17 @@ class PageTwo extends React.Component {
                    
                 </div>
                 
-                <DropzoneArea filesLimit={1} onChange={(files) => console.log('Files:', files)}/>
+                <DropzoneArea acceptedFiles={['.vfg']} showAlerts={false} filesLimit={1} fileObjects={this.state.files} onChange={(files) => {this.handleFileChange(files)}}/>
                 
                 </Container>
 
                 <Container maxWidth="sm" component="main"  marginTop="50">
                 <div margin-top="50">
-                <Button variant="contained" color="#224878" onClick={this.handleOnClick} text-align="left">Cancell</Button>
-                <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={this.handleOnClick} text-align="right">Upload File</Button>
+                <Button variant="contained" color="#224878" onClick={this.handleOnClick} text-align="left">Cancel</Button>
+                <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
+                    // eslint-disable-next-line no-restricted-globals
+                    location.href = '/page4';
+                }} text-align="right">Continue</Button>
                 </div>
                 </Container>
             </div>

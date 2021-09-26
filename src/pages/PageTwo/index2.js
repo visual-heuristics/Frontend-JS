@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 const tiers = [
   {
-    title: 'Porblem',
+    title: 'Problem',
     pageNo: 1,
     description: ['Build visualisation from problem'],
     buttonText: 'Sign up for free',
@@ -100,13 +100,13 @@ const tiers = [
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
   },
-  {
-    title: 'Demo',
-    pageNo: 4,
-    description: ['Demo File for visualisation',""],
-    buttonText: 'Sign up for free',
-    buttonVariant: 'outlined',
-  },
+  // {
+  //   title: 'Demo',
+  //   pageNo: 4,
+  //   description: ['Demo File for visualisation',""],
+  //   buttonText: 'Sign up for free',
+  //   buttonVariant: 'outlined',
+  // },
 ];
 // const footers = [
 //   {
