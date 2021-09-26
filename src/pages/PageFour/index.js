@@ -237,12 +237,13 @@ class PageFour extends React.Component {
         } else {
             this.diff(nextIndex)
             const map = this.highlight(nextIndex)
-            this.setState( {
+            this.setState({
                 blockIndex: nextIndex,
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map,
-            playButtonColor: 'default',
-            pauseButtonColor: 'primary'})
+                playButtonColor: 'default',
+                pauseButtonColor: 'primary'}
+            )
             this.stepItem[nextIndex].current.scrollIntoView();
 
             nextIndex++;

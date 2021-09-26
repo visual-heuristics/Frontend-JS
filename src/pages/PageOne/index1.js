@@ -218,11 +218,13 @@ class PageOne extends React.Component {
                     <h3 style={subtitle}>Build Visualisation From Problem</h3>
                 </div>
 
-                <div><h3 style={text}>
+                <div>
+                    <h3 style={text}>
                         Option 1 - Planner URL
-                </h3></div>
+                    </h3>
+                </div>
                 
-                    <form className={useStyles.root} noValidate autoComplete="off">
+                <form className={useStyles.root} noValidate autoComplete="off">
                     <div style={text}>
                         <TextField id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '45%'}}/>
                     </div>
@@ -231,12 +233,14 @@ class PageOne extends React.Component {
                             Paste
                         </Button>
                     </div>
-                    </form>
+                </form>
            
 
-                <div style={{marginTop:"5%"}}><h3 style={text}>
+                <div style={{marginTop:"5%"}}>
+                    <h3 style={text}>
                         Option 2 - Upload Problem Domain and Animation Profile Files
-                </h3></div>
+                    </h3>
+                </div>
                 <div>
                     <div style={section}>
                         <h2>Domain File</h2>
@@ -247,7 +251,7 @@ class PageOne extends React.Component {
                         <p>Object is representation</p>
                     </div>
                     <div style={drop}>
-                    <Dropzone onDrop={this.onDrop1} maxFiles={'1'}>
+                        <Dropzone onDrop={this.onDrop1} maxFiles={'1'}>
                         {({getRootProps, getInputProps}) => (
                             <section style={section1}>
                                 <div {...getRootProps()} style={drop1} >
@@ -260,10 +264,10 @@ class PageOne extends React.Component {
                                 </aside>
                             </section>
                         )}
-                    </Dropzone>
+                        </Dropzone>
                     </div>
                     <div style={drop}>
-                    <Dropzone onDrop={this.onDrop2} maxFiles={'1'}>
+                        <Dropzone onDrop={this.onDrop2} maxFiles={'1'}>
                         {({getRootProps, getInputProps}) => (
                             <section style={section1}>
                                 <div {...getRootProps()} style={drop1} >
@@ -276,10 +280,10 @@ class PageOne extends React.Component {
                                 </aside>
                             </section>
                         )}
-                    </Dropzone>
+                        </Dropzone>
                     </div>
                     <div style={drop}>
-                    <Dropzone onDrop={this.onDrop3} maxFiles={'1'}>
+                        <Dropzone onDrop={this.onDrop3} maxFiles={'1'}>
                         {({getRootProps, getInputProps}) => (
                             <section style={section1}>
                                 <div {...getRootProps()} style={drop1} >
@@ -292,7 +296,7 @@ class PageOne extends React.Component {
                                 </aside>
                             </section>
                         )}
-                    </Dropzone>
+                        </Dropzone>
                     </div>
                 </div>
                 <div>
