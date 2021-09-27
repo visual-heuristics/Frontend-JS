@@ -88,4 +88,5 @@ export const stepSubgoalMap = getStepSubgoalMap();
 //export default null;
 
 export const initialPos = getInitialBlocksPos();
+export const vfg = contentObject;
 
