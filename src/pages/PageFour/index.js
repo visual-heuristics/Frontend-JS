@@ -1,7 +1,7 @@
 import React from "react";
-import {Stage, Text, Graphics} from '@inlet/react-pixi';
+import {Stage, Text, Graphics, Sprite} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap} from './dataUtils';
+import {subGoal, stepInfo, allBlocks, claw, steps, stepSubgoalMap, vfg} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -400,7 +400,19 @@ class PageFour extends React.Component {
                         }
                         {
                             // Draw the claw
-                            <Graphics
+
+                            //reading directly from vfg, but in a (future) generalisable way, we don't know if there are claws or blocks
+                            //we just render them all, which is easier
+
+                            <Sprite
+                            image={"data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf('img-claw')]} 
+                            scale={{ x: 0.5, y: 0.5 }}
+                            anchor={(0,0)}
+                            x={canvasWidth_Middle/4-50} // this must be extracted from vfg, this is just example
+                            
+                        
+                            />
+                            /*<Graphics
                                 key={`${0}_claw`}
                                 draw={g => {
                                     g.clear();
@@ -415,6 +427,7 @@ class PageFour extends React.Component {
                                     g.lineTo(canvasWidth_Middle, canvasHeight_Middle)
                                 }}
                             />
+                            */
                         }
                     </Stage>
                     {/*controller buttons*/}

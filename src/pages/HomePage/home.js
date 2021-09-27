@@ -104,13 +104,13 @@ const tiers = [
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
   },
-  // {
-  //   title: 'Demo',
-  //   pageNo: 4,
-  //   description: ['Demo File for visualisation',""],
-  //   buttonText: 'Sign up for free',
-  //   buttonVariant: 'outlined',
-  // },
+  {
+     title: 'Demo',
+     pageNo: 4,
+     description: ['Demo File for visualisation',""],
+     buttonText: 'Sign up for free',
+     buttonVariant: 'outlined',
+   },
 ];
 // const footers = [
 //   {
@@ -157,10 +157,10 @@ export default function Home() {
       </Container>
       {/* End hero unit */}
       <Container maxWidth="md" component="main">
-        <Grid container spacing={4} alignItems="stretch" direction="row">
+        <Grid container spacing={3} alignItems="stretch" direction="row">
           {tiers.map((tier) => (
             // Enterprise card is full width at sm breakpoint
-            <Grid item key={tier.title} xs={4} sm={tier.title === 'Enterprise' ? 12 : 4} md={4}>
+            <Grid item key={tier.title} xs={3} sm={tier.title === 'Enterprise' ? 12 : 3} md={3}>
               <Card>
                 <CardHeader
                   title={tier.title}
