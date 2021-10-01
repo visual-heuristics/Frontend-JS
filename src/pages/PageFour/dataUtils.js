@@ -1,5 +1,3 @@
-import d from './blockWorld.js';
-// let contentObject = d;
 let contentObject = {};
 
 const content = localStorage.getItem('fileContent');
@@ -7,18 +5,12 @@ if(content) {
     contentObject = JSON.parse(content);
 }
 
-function getAllBlocks() {
-    const stages = contentObject.visualStages || [];
-
-    const blocks = stages.map(stage => {
-        return stage.visualSprites.filter(s => s.prefabimage === "img-block");
+function getAllStages() {
+    const visualStages = contentObject.visualStages || [];
+    const stages = visualStages.map(stage => {
+        return stage.visualSprites;
     })
-
-    return blocks;
-}
-
-function getClaw() {
-    return contentObject.visualStages ? contentObject.visualStages[0].visualSprites.filter(s => s.prefabimage === "img-claw") : [];
+    return stages;
 }
 
 function getSteps() {
@@ -28,6 +20,7 @@ function getSteps() {
 function getStepInfo() {
     return contentObject.visualStages ? contentObject.visualStages.map((s =>s.stageInfo)) : [];
 }
+
 
 function getSubGoal() {
     if( !contentObject.subgoalMap) {
@@ -66,27 +59,23 @@ function getStepSubgoalMap() {
     return map;
 }
 
+// function getInitialBlocksPos() {
+//     if( !contentObject.visualStages) {
+//         return {};
+//     }
+//     const initialPos = {}
+//     const blocks = contentObject.visualStages[0].visualSprites.filter(s => s.prefabimage === "img-block");
+//     blocks.map((block, i) => {
+//         initialPos[block.name] = [block.x/2, block.y/2]
+//     })
+//     return initialPos;
+// }
 
-function getInitialBlocksPos() {
-    if( !contentObject.visualStages) {
-        return {};
-    }
-    const initialPos = {}
-    const blocks = contentObject.visualStages[0].visualSprites.filter(s => s.prefabimage === "img-block");
-    blocks.map((block, i) => {
-        initialPos[block.name] = [block.x/2, block.y/2]
-    })
-    return initialPos;
-}
-
-export const allBlocks = getAllBlocks();
-export const claw = getClaw();
+export const allStages = getAllStages();
 export const steps = getSteps();
 export const stepInfo =  getStepInfo();
 export const subGoal = getSubGoal();
 export const stepSubgoalMap = getStepSubgoalMap();
-//export default null;
-
-export const initialPos = getInitialBlocksPos();
 export const vfg = contentObject;
-
+//export const initialPos = getInitialBlocksPos();
+//export default null;
