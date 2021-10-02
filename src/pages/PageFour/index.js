@@ -1,17 +1,7 @@
 import React from "react";
-import {Stage, Text, Graphics, Sprite} from '@inlet/react-pixi';
-import {utils} from 'pixi.js';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
-import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import ReplayIcon from '@material-ui/icons/Replay';
 import { makeStyles } from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
 import styles from './index.less';
-import {PlayControl, SubGoals, StepsList, ViScreen, TestVis} from './components/vis';
+import {PlayControl, SubGoals, StepsList, ViScreen} from './components/vis';
 
 let vfg = {};
 

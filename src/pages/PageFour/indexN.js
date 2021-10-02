@@ -10,7 +10,6 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ReplayIcon from '@material-ui/icons/Replay';
 import { makeStyles } from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
 import styles from './index.less';
 
 const canvasWidth_Middle = 800
