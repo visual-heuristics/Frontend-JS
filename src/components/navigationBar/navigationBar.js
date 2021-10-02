@@ -50,7 +50,7 @@ function NavigationBar() {
     }
 
     return(
-    <AppBar position="static" backgroundColor="#224878" elevation={0} className={classes.appBar}>
+    <AppBar position="static" background-color="#224878" elevation={0} className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
       <Typography variant="h6" color="inherit" align="left" noWrap className={classes.toolbarTitle}>
         Planimation
