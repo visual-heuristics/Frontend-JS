@@ -22,35 +22,35 @@ class PageFour extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            currentStep : 0,
-        }
         // Every function that interfaces with UI and data used 
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
+    }
+    state = {
+        currentStep : 0,
     }
 
     handleOnClick() {
         this.props.history.push('/')
     }
 
-    handleChangeStep(index){
-        this.setState({currentStep : index,})
+    handleChangeStep = (index) =>{
+        let step = {...this.state};
+        step = {currentStep: index};
+        this.setState( step );
     }
 
     render() {
         return(
             <div className ={styles.container}>
-                <StepsList vfg={vfg} currentStep={this.state.currentStep}/>
+                <StepsList vfg={vfg} onUpdateStep={this.handleChangeStep} currentStep={this.state.currentStep}/>
                 <div style={{display: 'inline-block'}}> 
-                    <ViScreen vfg={vfg}/>
+                    <ViScreen vfg={vfg} onUpdateStep={this.handleChangeStep} currentStep={this.state.currentStep} />
                     <PlayControl vfg={vfg}/>
                     
                 </div>
-                <SubGoals vfg={vfg}/>
-                
+                <SubGoals vfg={vfg}/>          
             </div>
-
         );
     }
 }

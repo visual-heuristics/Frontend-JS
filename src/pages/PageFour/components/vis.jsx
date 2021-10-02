@@ -1,5 +1,5 @@
 import { Stage, Sprite, Text, Container } from "@inlet/react-pixi";
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { utils } from "pixi.js";
 import { Application } from "pixi.js";
 import IconButton from "@material-ui/core/IconButton";
@@ -14,10 +14,12 @@ function valuetext(value) {
   return `${value}`;
 }
 
-export const ViScreen = ({ vfg }) => {
+export const ViScreen = ({ vfg, onUpdateStep, currentStep }) => {
   const screenWidth = 600;
   const screenHeight = 500;
   const scaleFactor = 0.5;
+  //const [currentStep, setStep] = useState(0);
+
   return (
     <div className={"cap"}>
       <Stage
@@ -25,7 +27,7 @@ export const ViScreen = ({ vfg }) => {
         height={screenHeight}
         options={{ backgroundColor: 0xffffff }}
       >
-        {vfg.visualStages[0].visualSprites.map((sprite, i) => (
+        {vfg.visualStages[currentStep].visualSprites.map((sprite, i) => (
           <React.Fragment key={i}>
             <Sprite
               key={sprite.name}
@@ -62,25 +64,28 @@ export const ViScreen = ({ vfg }) => {
   );
 };
 
-export const StepsList = (props) => {
+export const StepsList = ({ vfg, currentStep, onUpdateStep }) => {
   return (
     <div style={{ display: "inline-block" }}>
       <div>
         <h4>Steps</h4>
-        {props.vfg.visualStages.map((stages, i) => (
-          <li
+        {vfg.visualStages.map((stages, i) => (
+          <div
             key={i}
             style={{
-              backgroundColor: i === props.currentStep ? "#eef" : "white",
+              backgroundColor: i === currentStep ? "#eef" : "white",
+            }}
+            onClick={() => {
+              onUpdateStep(i);
             }}
           >
             {stages.stageName}
-          </li>
+          </div>
         ))}
       </div>
-      <div>
+      <div style={{ width: "120px" }}>
         <h4>Step Info</h4>
-        {props.vfg.visualStages[props.currentStep].stageInfo}
+        {vfg.visualStages[currentStep].stageInfo}
       </div>
     </div>
   );
@@ -228,7 +233,7 @@ export const PlayControl = (props) => {
         min={1}
         max={5}
         valueLabelDisplay="auto"
-        style={{ width: "150px" }}
+        style={{ width: "200px" }}
       />
     </div>
   );
