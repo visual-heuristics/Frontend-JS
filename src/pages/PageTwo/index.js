@@ -9,6 +9,23 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import css from './index.module.less'
 
 
+const header = {
+	width: "100%",
+	height: "50px",
+	backgroundColor: "#20477A"
+}
+
+const subtitle = {
+	width: "90%",
+	height: "5%",
+    textAlign: 'left',
+    fontWeight: 'bold',
+    color: '#fff',
+    letterSpacing: '2px',
+    float: 'left',
+    marginTop: '0px',
+	marginLeft: '25px',
+}
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -127,7 +144,11 @@ class PageTwo extends React.Component {
     render() {
         return (
             <React.Fragment>
+              <div style={header}>
+                    <h3 style={subtitle}>Build Visualisation From VFG file</h3>
+                </div>
             <div>
+
             <div className={css.buttonBox}>
             <Container maxWidth="sm" component="main" className={useStyles.heroContent}>
             <Typography variant="h4" align="center" color="textPrimary" component="p">
