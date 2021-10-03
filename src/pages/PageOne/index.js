@@ -53,6 +53,10 @@ class PageOne extends React.Component {
     handleOnClick() {
         this.props.history.push('/')
     }
+    handleStore = (content)=> {
+        localStorage.setItem('fileContent', content);
+        window.location.href = '/page4';
+    }
 
     render() {
 
@@ -91,7 +95,7 @@ class PageOne extends React.Component {
                         Option 2 - Upload Problem Domain and Animation Profile Files
                     </h3>
                 </div>               
-                <DropAndFetch onClick={this.handleOnClick}/>              
+                <DropAndFetch onClick={this.handleOnClick} onStore={this.handleStore}/>              
             </div>
             
           );

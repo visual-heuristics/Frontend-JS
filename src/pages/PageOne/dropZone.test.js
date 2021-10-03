@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import DragAndDrop from './dragAndDrop';
+import DropZone from './dropZone';
 
 
 it("Renders Correctly ", () => {
