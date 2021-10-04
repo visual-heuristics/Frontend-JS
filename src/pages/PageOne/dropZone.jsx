@@ -32,8 +32,8 @@ class DropZone extends React.Component {
       this.state.files.length > 0
         ? this.state.files[0].name
         : "Drag and drop " +
-          this.props.name.toLowerCase() +
-          this.props.fileType +
+          this.props?.name?.toLowerCase() +
+          this.props?.fileType?? '--' +
           " here or click";
 
     return (

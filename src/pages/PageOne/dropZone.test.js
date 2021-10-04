@@ -5,7 +5,7 @@ import DropZone from './dropZone';
 
 it("Renders Correctly ", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<DragAndDrop
+    ReactDOM.render(<DropZone
     />, div);
     ReactDOM.unmountComponentAtNode(div);
 });

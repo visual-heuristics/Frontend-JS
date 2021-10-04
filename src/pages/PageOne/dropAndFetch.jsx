@@ -5,7 +5,7 @@ import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import css from "./index.module.less";
 
-const dragsAndDrops=[
+const dragsAndDrops = [
   { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
   {
     name: "Problem",
@@ -24,8 +24,6 @@ class DropAndFetch extends React.Component {
     this.datas = {};
   }
 
- 
-
   componentWillUnmount = () => {
     this.setState = (state, callback) => {
       return;
@@ -37,18 +35,22 @@ class DropAndFetch extends React.Component {
     for (const name in files) {
       formData.append(name, files[name]);
     }
-    const resp = await fetch(
-      "https://planimation.planning.domains/upload/pddl",
-      {
-        //"http://127.0.0.1:8000/upload/pddl" On local server
-        method: "POST", //DO NOT use headers
-        body: formData, // Dataformat
-      }
-    );
+    try {
+      const resp = await fetch(
+        "https://planimation.planning.domains/upload/pddl",
+        {
+          //"http://127.0.0.1:8000/upload/pddl" On local server
+          method: "POST", //DO NOT use headers
+          body: formData, // Dataformat
+        }
+      );
 
-    const data = await resp.json();
-    const txt = JSON.stringify(data);
-    this.props.onStore(txt);
+      const data = await resp.json();
+      const txt = JSON.stringify(data);
+      this.props.onStore(txt);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   handleSubmit = () => {

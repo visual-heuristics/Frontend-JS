@@ -337,6 +337,7 @@ class PageFour extends React.Component {
 
     render() {
         // Get all sprites
+        if(!vfg.visualStages) return null;
         var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
         // Sort sprites by their depth
         sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
@@ -347,7 +348,7 @@ class PageFour extends React.Component {
                     <div className={styles.sub_title}> Steps </div>
                     <div className={styles.left_upper}>
                         {
-                            steps.map((step, i) => {
+                            steps && steps.map((step, i) => {
                                 return <div className={styles.stage_item}
                                             style={{backgroundColor: i === this.state.stepInfoIndex ? '#eef': 'white'}}
                                             onClick={()=>{this.handleSwitchStage(i);}}
