@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styles from "./styles.less";
+// import styles from "./styles.less";
 
 class DragAndDrop extends React.Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ class DragAndDrop extends React.Component {
 
   render() {
     return (
-      <div ref={(elem) => (this.nv = elem)} className={styles.drop_area}>
+      <div ref={(elem) => (this.nv = elem)}>
         {this.props.name}
       </div>
     );
