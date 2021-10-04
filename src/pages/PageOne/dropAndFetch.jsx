@@ -5,26 +5,31 @@ import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import css from "./index.module.less";
 
+const dragsAndDrops=[
+  { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
+  {
+    name: "Problem",
+    fileType: ".pddl",
+    desc: "for objects, initial state and goal.",
+  },
+  {
+    name: "Animation",
+    fileType: ".pddl",
+    desc: "object is representation.",
+  },
+];
 class DropAndFetch extends React.Component {
   constructor(props) {
     super(props);
     this.datas = {};
   }
 
-  state = {
-    dragsAndDrops: [
-      { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
-      {
-        name: "Problem",
-        fileType: ".pddl",
-        desc: "for objects, initial state and goal.",
-      },
-      {
-        name: "Animation",
-        fileType: ".pddl",
-        desc: "object is representation.",
-      },
-    ],
+ 
+
+  componentWillUnmount = () => {
+    this.setState = (state, callback) => {
+      return;
+    };
   };
 
   uploadPDDL = async (files) => {
@@ -70,7 +75,7 @@ class DropAndFetch extends React.Component {
       <React.Fragment>
         <div>
           <Container component="main" className={css.dropareaBox}>
-            {this.state.dragsAndDrops.map((drag) => (
+            {dragsAndDrops.map((drag) => (
               <DropZone
                 key={drag.name}
                 name={drag.name}
@@ -80,7 +85,7 @@ class DropAndFetch extends React.Component {
               />
             ))}
           </Container>
-          <Container maxWidth="sm" component="main" marginTop="50">
+          <Container maxWidth="sm" component="main">
             <div className={css.buttonBox}>
               <Button
                 variant="contained"

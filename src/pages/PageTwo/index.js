@@ -167,9 +167,9 @@ class PageTwo extends React.Component {
                 
                 </Container>
 
-                <Container maxWidth="sm" component="main"  marginTop="50">
+                <Container maxWidth="sm" component="main">
                 <div className={css.buttonBox}>
-                <Button variant="contained" color="#224878" onClick={this.handleOnClick} text-align="left">Cancel</Button>
+                <Button variant="contained" color="default" onClick={this.handleOnClick} text-align="left">Cancel</Button>
                 <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
                     // eslint-disable-next-line no-restricted-globals
                     location.href = '/page4';
