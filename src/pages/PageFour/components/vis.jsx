@@ -10,10 +10,6 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 import ReplayIcon from "@material-ui/icons/Replay";
 import Slider from "@material-ui/core/Slider";
 
-function valuetext(value) {
-  return `${value}`;
-}
-
 export const ViScreen = ({ vfg, onUpdateStep, currentStep }) => {
   const screenWidth = 600;
   const screenHeight = 500;
@@ -27,38 +23,45 @@ export const ViScreen = ({ vfg, onUpdateStep, currentStep }) => {
         height={screenHeight}
         options={{ backgroundColor: 0xffffff }}
       >
-        {vfg.visualStages[currentStep].visualSprites.map((sprite, i) => (
-          <React.Fragment key={i}>
-            <Sprite
-              key={sprite.name}
-              image={
-                "data:image/png;base64," +
-                vfg.imageTable.m_values[
-                  vfg.imageTable.m_keys.indexOf(sprite.prefabimage)
-                ]
-              }
-              tint={utils.rgb2hex([
-                sprite.color.r,
-                sprite.color.g,
-                sprite.color.b,
-              ])}
-              alpha={sprite.color.a}
-              height={sprite.height * scaleFactor}
-              width={sprite.width * scaleFactor}
-              x={sprite.x * scaleFactor}
-              y={screenHeight - sprite.y * scaleFactor}
-              anchor={[0, 1]}
-            />
+        <Container sortableChildren={true}>
+          {vfg.visualStages[currentStep].visualSprites.map((sprite, i) => (
+            <React.Fragment key={i}>
+              <Sprite
+                key={sprite.name}
+                image={
+                  "data:image/png;base64," +
+                  vfg.imageTable.m_values[
+                    vfg.imageTable.m_keys.indexOf(sprite.prefabimage)
+                  ]
+                }
+                tint={utils.rgb2hex([
+                  sprite.color.r,
+                  sprite.color.g,
+                  sprite.color.b,
+                ])}
+                alpha={sprite.color.a}
+                zIndex={sprite.depth}
+                rotation={
+                  "rotate" in sprite ? (sprite.rotate * Math.PI) / 180 : 0
+                }
+                {...sprite}
+                height={sprite.height * scaleFactor}
+                width={sprite.width * scaleFactor}
+                x={sprite.x * scaleFactor}
+                y={screenHeight - sprite.y * scaleFactor}
+                anchor={"rotate" in sprite ? [0.8, 0.5] : [0, 1]}
+              />
 
-            <Text
-              key={sprite.name + "name"}
-              text={sprite.showname ? sprite.name : ""}
-              anchor={[-0.75, 1.25]}
-              x={sprite.x * scaleFactor}
-              y={screenHeight - sprite.y * scaleFactor}
-            />
-          </React.Fragment>
-        ))}
+              <Text
+                key={sprite.name + "name"}
+                text={sprite.showname ? sprite.name : ""}
+                anchor={[-0.75, 1.25]}
+                x={sprite.x * scaleFactor}
+                y={screenHeight - sprite.y * scaleFactor}
+              />
+            </React.Fragment>
+          ))}
+        </Container>
       </Stage>
     </div>
   );
@@ -105,74 +108,17 @@ export const PlayControl = (props) => {
   const pauseButtonColor = "primary";
   const steps = 0;
 
-  function handlePreviousClick(value) {
-    //console.info("handlePreviousClick", value);
-    const previousIndex = Number(value) - 1;
-    if (previousIndex < 0) {
-      alert("It's already the initial state!");
-    } else {
-      this.diff(previousIndex);
-      const map = this.highlight(previousIndex);
-      this.setState({
-        blockIndex: previousIndex,
-        stepInfoIndex: previousIndex,
-        selectedSubGoals: map,
-      });
-      //console.info('DOM:', this.stepItem[index]);
-      this.stepItem[previousIndex].current.scrollIntoView();
-    }
-  }
+  function handlePreviousClick(value) {}
 
-  function handleNextClick(value) {
-    //console.info("handleNextClick", value);
-    const nextIndex = Number(value) + 1;
-    if (nextIndex >= steps.length) {
-      alert("It's already the final state!");
-    } else {
-      this.diff(nextIndex);
-      const map = this.highlight(nextIndex);
-      this.setState({
-        blockIndex: nextIndex,
-        stepInfoIndex: nextIndex,
-        selectedSubGoals: map,
-      });
-      // console.info('DOM:', this.stepItem[index]);
-      this.stepItem[nextIndex].current.scrollIntoView();
-    }
-  }
+  function handleNextClick(value) {}
+
   function handleStartClick(value) {}
 
-  function handlePauseClick() {
-    if (this.handlerPlay) {
-      this.setState({
-        playButtonColor: "primary",
-        pauseButtonColor: "default",
-      });
-      clearInterval(this.handlerPlay);
-    }
-  }
-  function handleSpeedScroll(value) {
-    // console.info(value);
-    this.setState({
-      playSpeed: value,
-    });
-  }
+  function handlePauseClick() {}
 
-  function handleResetClick() {
-    if (this.handlerPlay) {
-      clearInterval(this.handlerPlay);
-    }
-    this.diff(0);
-    const map = this.highlight(0);
-    this.setState({
-      blockIndex: 0,
-      stepInfoIndex: 0,
-      selectedSubGoals: map,
-      playButtonColor: "primary",
-      pauseButtonColor: "default",
-    });
-    this.stepItem[0].current.scrollIntoView();
-  }
+  function handleSpeedScroll(value) {}
+
+  function handleResetClick() {}
 
   return (
     <div style={{ display: "block", width: "1080px", height: "50px" }}>

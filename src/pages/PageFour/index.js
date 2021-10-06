@@ -28,6 +28,7 @@ class PageFour extends React.Component {
     }
     state = {
         currentStep : 0,
+        prevStep: 0,
     }
 
     handleOnClick() {
@@ -35,9 +36,10 @@ class PageFour extends React.Component {
     }
 
     handleChangeStep = (index) =>{
-        let step = {...this.state};
-        step = {currentStep: index};
-        this.setState( step );
+        let steps = {...this.state};
+        let prev = steps.currentStep;
+        steps = {currentStep: index, prevStep: prev};
+        this.setState( steps );
     }
 
     render() {
@@ -46,8 +48,7 @@ class PageFour extends React.Component {
                 <StepsList vfg={vfg} onUpdateStep={this.handleChangeStep} currentStep={this.state.currentStep}/>
                 <div style={{display: 'inline-block'}}> 
                     <ViScreen vfg={vfg} onUpdateStep={this.handleChangeStep} currentStep={this.state.currentStep} />
-                    <PlayControl vfg={vfg}/>
-                    
+                    <PlayControl vfg={vfg}/>    
                 </div>
                 <SubGoals vfg={vfg}/>          
             </div>
