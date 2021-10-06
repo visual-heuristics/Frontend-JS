@@ -1,7 +1,7 @@
 import React from "react";
 import {Stage, Text, Sprite} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg} from './dataUtils';
+import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -15,7 +15,7 @@ import styles from './index.less';
 import * as PIXI from 'pixi.js'
 
 const canvasWidth_Middle = 800
-const canvasHeight_Middle = 480
+const canvasHeight_Middle = 470
 
 const useStyles = makeStyles({
     root: {
@@ -268,15 +268,19 @@ class PageFour extends React.Component {
                         if(this.handlerPlay) {
                             clearTimeout(this.handlerPlay);
                         }
+                        this.setState({
+                            playButtonColor: 'primary',
+                            pauseButtonColor: 'default'}
+                        )
                     } else {
                         // setInterval effect
                         // detect change of playSpeed
-                        const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                        const handlerPlay = setTimeout(run, 1000/this.state.playSpeed);
                         this.handlerPlay = handlerPlay;
                     }
                 };
 
-                const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                const handlerPlay = setTimeout(run, 1000/this.state.playSpeed);
                 this.handlerPlay = handlerPlay;
             }
         }
@@ -327,6 +331,30 @@ class PageFour extends React.Component {
         this.stepItem[index].current.scrollIntoView();
     }
 
+    handleExportClick(){
+        const data = textContent
+        let blob = new Blob([data]);
+        let filename = "download.vfg";
+
+        if (typeof window.navigator.msSaveBlob !== "undefined") {
+            window.navigator.msSaveBlob(blob, filename);
+        } else {
+            var blobURL = window.URL.createObjectURL(blob);
+            // create a hidden <a> tag for download
+            var tempLink = document.createElement("a");
+            tempLink.style.display = "none";
+            tempLink.href = blobURL;
+            tempLink.setAttribute("download", filename);
+            if (typeof tempLink.download === "undefined") {
+                tempLink.setAttribute("target", "_blank");
+            }
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
+            window.URL.revokeObjectURL(blobURL);
+        }
+    }
+
     handleSpeedScroll(value){
         // console.info(value);
         this.setState({
@@ -337,7 +365,6 @@ class PageFour extends React.Component {
 
     render() {
         // Get all sprites
-        if(!vfg.visualStages) return null;
         var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
         // Sort sprites by their depth
         sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
@@ -374,10 +401,8 @@ class PageFour extends React.Component {
                         {
                             
                             sprites.map((sprite, i) => {
-                                // Get the texture from base64 image storing in the vfg file
+                                // Get the texture name
                                 var textureName = sprite.prefabimage
-                                var base = new PIXI.BaseTexture("data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]);
-                                var texture = new PIXI.Texture(base);
                                 // Get the color of the sprite
                                 var color = utils.rgb2hex([sprite.color.r, sprite.color.g, sprite.color.b])
                                 // Initialize the rotation of the sprite
@@ -400,7 +425,8 @@ class PageFour extends React.Component {
                                     return (
                                         <>
                                             <Sprite
-                                                texture = {texture}
+                                                // the image texture of the sprite
+                                                image = {"data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]}
                                                 name = {sprite.name}
                                                 anchor = {anchor}
                                                 rotation = {rotation}
@@ -426,7 +452,7 @@ class PageFour extends React.Component {
                                     return (
                                         <>
                                             <Sprite
-                                                texture = {texture}
+                                                image = {"data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]}
                                                 name = {sprite.name}
                                                 anchor={anchor}
                                                 rotation = {rotation}
@@ -479,6 +505,10 @@ class PageFour extends React.Component {
                         <Button variant="contained" color="primary" size="small" onClick={()=> {this.handleShowGoalClick()}}>
                             Show the Goal
                         </Button>
+                        &nbsp;&nbsp;
+                        <Button variant="contained" color="primary" size="small" onClick={()=> {this.handleExportClick()}}>
+                            Export
+                        </Button>
                     </div>
                     <div className={styles.sub_title}>
                         <div className={styles.sub_title_key}>Subgoal</div>
@@ -487,19 +517,19 @@ class PageFour extends React.Component {
                     <div className={styles.sub_list}>
                         {
                             [...subGoal.keys()].map(key => {
-                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : '')}
+                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : ' ')}
                                             key={key} onClick={()=> {this.handleSubItemClick(key)}}>
-                                    {key}
-                                    <div className={styles.sub_item_menu}
-                                        style={{display: this.state.showKey === key ? 'block': 'none'}}>
-                                        {subGoal.get(key).map(value => {
-                                            return <div className={styles.sub_item_menu_item}
-                                                        onClick={()=>this.handleStepClick(value)}
-                                                        key={key + value}
-                                            >Step {value}</div>
-                                        })}
-                                    </div>
-                                </div>;
+                                        {key} 
+                                        <div className={styles.sub_item_menu}
+                                            style={{display: this.state.showKey === key ? 'block': 'none'}}>
+                                            {subGoal.get(key).map(value => {
+                                                return <div className={styles.sub_item_menu_item}
+                                                            onClick={()=>this.handleStepClick(value)}
+                                                            key={key + value}
+                                                >Step {value}</div>
+                                            })}
+                                        </div>
+                                    </div>;
                             })
                         }
                     </div>

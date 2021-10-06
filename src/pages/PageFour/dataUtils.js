@@ -77,5 +77,6 @@ export const stepInfo =  getStepInfo();
 export const subGoal = getSubGoal();
 export const stepSubgoalMap = getStepSubgoalMap();
 export const vfg = contentObject;
+export const textContent = content
 //export const initialPos = getInitialBlocksPos();
 //export default null;
