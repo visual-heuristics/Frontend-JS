@@ -6,8 +6,26 @@ import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import css from './index.module.less'
 
 
+const header = {
+	width: "100%",
+	height: "50px",
+	backgroundColor: "#20477A"
+}
+
+const subtitle = {
+	width: "90%",
+	height: "5%",
+    textAlign: 'left',
+    fontWeight: 'bold',
+    color: '#fff',
+    letterSpacing: '2px',
+    float: 'left',
+    marginTop: '0px',
+	marginLeft: '25px',
+}
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -126,13 +144,18 @@ class PageTwo extends React.Component {
     render() {
         return (
             <React.Fragment>
+              <div style={header}>
+                    <h3 style={subtitle}>Build Visualisation From VFG file</h3>
+                </div>
             <div>
-        
+
+            <div className={css.buttonBox}>
             <Container maxWidth="sm" component="main" className={useStyles.heroContent}>
             <Typography variant="h4" align="center" color="textPrimary" component="p">
                 Select VFG file to generate visualisation directly.
                 </Typography>
             </Container>
+            </div>
 
 
                 <Container  maxWidth="sm" component="main">
@@ -144,9 +167,9 @@ class PageTwo extends React.Component {
                 
                 </Container>
 
-                <Container maxWidth="sm" component="main"  marginTop="50">
-                <div margin-top="50">
-                <Button variant="contained" color="#224878" onClick={this.handleOnClick} text-align="left">Cancel</Button>
+                <Container maxWidth="sm" component="main">
+                <div className={css.buttonBox}>
+                <Button variant="contained" color="default" onClick={this.handleOnClick} text-align="left">Cancel</Button>
                 <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
                     // eslint-disable-next-line no-restricted-globals
                     location.href = '/page4';

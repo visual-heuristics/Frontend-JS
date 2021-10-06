@@ -375,7 +375,7 @@ class PageFour extends React.Component {
                     <div className={styles.sub_title}> Steps </div>
                     <div className={styles.left_upper}>
                         {
-                            steps.map((step, i) => {
+                            steps && steps.map((step, i) => {
                                 return <div className={styles.stage_item}
                                             style={{backgroundColor: i === this.state.stepInfoIndex ? '#eef': 'white'}}
                                             onClick={()=>{this.handleSwitchStage(i);}}

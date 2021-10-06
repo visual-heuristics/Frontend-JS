@@ -50,7 +50,7 @@ function NavigationBar() {
     }
 
     return(
-    <AppBar position="static" backgroundColor="#224878" elevation={0} className={classes.appBar}>
+    <AppBar position="static" elevation={0} className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
       <Typography variant="h6" color="inherit" align="left" noWrap className={classes.toolbarTitle}>
         Planimation
@@ -65,9 +65,9 @@ function NavigationBar() {
         <Link variant="button" color="inherit" onClick={()=>handleClick('manual')} className={classes.link}>
           User Manual
         </Link>
-        {/*<Link variant="button" color="inherit" onClick={()=>handleClick('demo')} className={classes.link}>*/}
-        {/*  Demo*/}
-        {/*</Link>*/}
+        <Link variant="button" color="inherit" onClick={()=>handleClick('demo')} className={classes.link}>
+          Demo
+        </Link>
       </nav>
       <Button color="inherit" variant="outlined"onClick={()=>handleClick('home')}  className={classes.link} >
         HomePage

@@ -15,10 +15,12 @@ class DropZone extends React.Component {
     console.log(file);
 
     if (file[0].name.endsWith(this.props.fileType)) {
-      console.log(this.state.files);
+      //console.log(this.state.files);
       this.setState({ files: file });
-      console.log(this.state.files);
-      this.props.onFileLoad(this.props.name, file[0]);
+      //console.log(this.state.files);
+      file[0].text().then((result) => {
+        this.props.onFileLoad(this.props.name, result);
+      });
     } else {
       console.log("Wrong file type");
       alert("Wrong file type");
@@ -30,8 +32,8 @@ class DropZone extends React.Component {
       this.state.files.length > 0
         ? this.state.files[0].name
         : "Drag and drop " +
-          this.props.name.toLowerCase() +
-          this.props.fileType +
+          this.props?.name?.toLowerCase() +
+          this.props?.fileType?? '--' +
           " here or click";
 
     return (

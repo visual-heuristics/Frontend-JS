@@ -5,48 +5,52 @@ import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import css from "./index.module.less";
 
+const dragsAndDrops = [
+  { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
+  {
+    name: "Problem",
+    fileType: ".pddl",
+    desc: "for objects, initial state and goal.",
+  },
+  {
+    name: "Animation",
+    fileType: ".pddl",
+    desc: "object is representation.",
+  },
+];
 class DropAndFetch extends React.Component {
   constructor(props) {
     super(props);
     this.datas = {};
   }
 
-  state = {
-    dragsAndDrops: [
-      { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
-      {
-        name: "Problem",
-        fileType: ".pddl",
-        desc: "for objects, initial state and goal.",
-      },
-      {
-        name: "Animation",
-        fileType: ".pddl",
-        desc: "object is representation.",
-      },
-    ],
+  componentWillUnmount = () => {
+    this.setState = (state, callback) => {
+      return;
+    };
   };
 
-  uploadPDDL = (files) => {
+  uploadPDDL = async (files) => {
     const formData = new FormData();
     for (const name in files) {
       formData.append(name, files[name]);
     }
-    let resp;
+    try {
+      const resp = await fetch(
+        "https://planimation.planning.domains/upload/pddl",
+        {
+          //"http://127.0.0.1:8000/upload/pddl" On local server
+          method: "POST", //DO NOT use headers
+          body: formData, // Dataformat
+        }
+      );
 
-    fetch("https://planimation.planning.domains/upload/pddl", {
-      //"http://127.0.0.1:8000/upload/pddl", {
-      method: "POST", //DO NOT use headers
-      body: formData, // Dataformat
-    })
-      .then(
-        (response) => console.log(response) //read response code and replicate
-      )
-      .then(
-        (success) => (resp = success) //success contains the VFG
-      )
-      .catch((error) => console.log(error));
-    return resp;
+      const data = await resp.json();
+      const txt = JSON.stringify(data);
+      this.props.onStore(txt);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   handleSubmit = () => {
@@ -56,8 +60,7 @@ class DropAndFetch extends React.Component {
       "problem" in this.datas &&
       "animation" in this.datas
     ) {
-      let resp = this.uploadPDDL(this.datas);
-      console.log(resp);
+      this.uploadPDDL(this.datas);
     } else {
       console.log("Some files are missing");
       alert("Some files are missing");
@@ -65,7 +68,8 @@ class DropAndFetch extends React.Component {
   };
 
   handleFileLoad = (name, file) => {
-    this.datas[name] = file;
+    this.datas[name.toLowerCase()] = file;
+    console.log(this.datas);
   };
 
   render() {
@@ -73,7 +77,7 @@ class DropAndFetch extends React.Component {
       <React.Fragment>
         <div>
           <Container component="main" className={css.dropareaBox}>
-            {this.state.dragsAndDrops.map((drag) => (
+            {dragsAndDrops.map((drag) => (
               <DropZone
                 key={drag.name}
                 name={drag.name}
@@ -83,11 +87,11 @@ class DropAndFetch extends React.Component {
               />
             ))}
           </Container>
-          <Container maxWidth="sm" component="main" marginTop="50">
+          <Container maxWidth="sm" component="main">
             <div className={css.buttonBox}>
               <Button
                 variant="contained"
-                color="#224878"
+                color="default"
                 onClick={() => this.props.onClick()}
               >
                 Cancel
