@@ -337,6 +337,7 @@ class PageFour extends React.Component {
 
     render() {
         // Get all sprites
+        if(!vfg.visualStages) return null;
         var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
         // Sort sprites by their depth
         sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
@@ -347,7 +348,7 @@ class PageFour extends React.Component {
                     <div className={styles.sub_title}> Steps </div>
                     <div className={styles.left_upper}>
                         {
-                            steps.map((step, i) => {
+                            steps && steps.map((step, i) => {
                                 return <div className={styles.stage_item}
                                             style={{backgroundColor: i === this.state.stepInfoIndex ? '#eef': 'white'}}
                                             onClick={()=>{this.handleSwitchStage(i);}}
@@ -375,8 +376,8 @@ class PageFour extends React.Component {
                             sprites.map((sprite, i) => {
                                 // Get the texture from base64 image storing in the vfg file
                                 var textureName = sprite.prefabimage
-                                var base = new PIXI.BaseTexture("data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]);
-                                var texture = new PIXI.Texture(base);
+                                // var base = new PIXI.BaseTexture("data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]);
+                                // var texture = new PIXI.Texture(base);
                                 // Get the color of the sprite
                                 var color = utils.rgb2hex([sprite.color.r, sprite.color.g, sprite.color.b])
                                 // Initialize the rotation of the sprite
@@ -399,7 +400,8 @@ class PageFour extends React.Component {
                                     return (
                                         <>
                                             <Sprite
-                                                texture = {texture}
+                                                //texture = {texture}
+                                                image =  {"data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]}
                                                 name = {sprite.name}
                                                 anchor = {anchor}
                                                 rotation = {rotation}
@@ -425,7 +427,8 @@ class PageFour extends React.Component {
                                     return (
                                         <>
                                             <Sprite
-                                                texture = {texture}
+                                                //texture = {texture}
+                                                image =  {"data:image/png;base64,"+vfg.imageTable.m_values[vfg.imageTable.m_keys.indexOf(textureName)]}
                                                 name = {sprite.name}
                                                 anchor={anchor}
                                                 rotation = {rotation}
