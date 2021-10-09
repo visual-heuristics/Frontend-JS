@@ -37,29 +37,40 @@ const text = {
 }
 
 class PageOne extends React.Component {
-    // init data
     constructor(props) {
         super(props);
-
-        this.state = {
-            // data that will be used/changed in render function
-
-        }
-        // Every function that interfaces with UI and data used 
-        // in this class needs to bind like this:
+        this.state = {url:'',fineUrl:'',};
         this.handleOnClick = this.handleOnClick.bind(this);
     }
 
     handleOnClick() {
         this.props.history.push('/')
     }
+
     handleStore = (content)=> {
         localStorage.setItem('fileContent', content);
         window.location.href = '/page4';
     }
 
-    render() {
+    handleNewURL = (urlString) => {
+        const url = {...this.state};
+        url['url'] = urlString;
+        this.setState(url);
+    }
 
+    handleSendURL = () => {
+        const stt = {...this.state};
+        const url = stt.url;
+        const pattern = new RegExp('^(https?:\\/\\/)?','i');
+        if (!!pattern.test(url)){
+            stt['fineUrl'] = url;
+        this.setState(stt);
+        } else {
+        alert('The URL is not valid');
+        }
+    }
+
+    render() {
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {
@@ -69,7 +80,6 @@ class PageOne extends React.Component {
             },         
           }));
 
-
         return (
             <div style={container}>
                 <div style={header}>
@@ -77,27 +87,26 @@ class PageOne extends React.Component {
                 </div>
                 <div>
                     <h3 style={text}>
-                        Option 1 - Planner URL
+                        Step 1 - Change planner URL (Optional)
                     </h3>
                 </div>               
                 <form className={useStyles.root} noValidate autoComplete="off">
                     <div style={text}>
-                        <TextField id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '10%'}}/>
+                        <TextField onChange={ e => this.handleNewURL(e.target.value)} id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '10%'}}/>
                     </div>
                     <div style={{float: 'left', marginLeft: '1%', alignItems: 'center'}}>
-                        <Button variant="contained" color="primary" size="medium">
+                        <Button onClick={this.handleSendURL} variant="contained" color="primary" size="medium">
                             Paste
                         </Button>
                     </div>
                 </form>          
                 <div style={{marginTop:"5%"}}>
                     <h3 style={text}>
-                        Option 2 - Upload Problem Domain and Animation Profile Files
+                        Step 2 - Upload Problem, Domain and Animation Profile Files
                     </h3>
                 </div>               
-                <DropAndFetch onClick={this.handleOnClick} onStore={this.handleStore}/>              
+                <DropAndFetch onClick={this.handleOnClick} onStore={this.handleStore} newURL={this.state.fineUrl}/>              
             </div>
-            
           );
     }
     
