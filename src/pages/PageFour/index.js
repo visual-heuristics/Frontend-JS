@@ -90,34 +90,36 @@ class PageFour extends React.Component {
         const previousStageIndex = this.state.blockIndex;
         const previousStage = allStages[previousStageIndex];
         const newStage = allStages[index];
+        const times = 20
+        // this.setState({
+        //     drawBlocks: [...newStage]
+        // });
+        //
+        // requestAnimationFrame(() => {
+        //
+        // })
 
-        // Differ 2 sets of blocks
-        // - find out, different blocks;
-        // - blockId | blockIndex
-        // - blockId => src, x1, y1, dest, x2, y2
-        // - blockId => xn, yn: x1 + (x2-x1)/10 * n, ...
-        // - blockId => xn, yn
-        // - [{blockId1: [xn, yn], blockId2: [xn, yn]},
-        // {},
-        // {}
-        // ]
-        // => movedBlocks
         const movedBlocks = {};
         previousStage.map((eachBlock, i) => {
+            if(eachBlock.name !== newStage[i].name) return
             if(eachBlock.x !== newStage[i].x || eachBlock.y !== newStage[i].y) {
                 // 10
                 // { blockId => [{x:x1,y:y1}, {x: x2, y: y2}, , x3, .... x10] }
                 const changingPos = [];
-                for (let j = 0; j < 50; j++) {
+                for (let j = 0; j < times; j++) {
                     const specificPos = {}
-                    specificPos.x = eachBlock.x + (newStage[i].x - eachBlock.x)/50 * (j + 1)
-                    specificPos.y = eachBlock.y + (newStage[i].y - eachBlock.y)/50 * (j + 1)
+                    // specificPos.x = eachBlock.x + (newStage[i].x - eachBlock.x)/50 * (j + 1)
+                    // specificPos.y = eachBlock.y + (newStage[i].y - eachBlock.y)/50 * (j + 1)
+                    specificPos.minX = eachBlock.minX + (newStage[i].minX - eachBlock.minX)/times * (j + 1);
+                    specificPos.maxX = eachBlock.maxX + (newStage[i].maxX - eachBlock.maxX)/times * (j + 1);
+                    specificPos.minY = eachBlock.minY + (newStage[i].minY - eachBlock.minY)/times * (j + 1);
+                    specificPos.maxY = eachBlock.maxY + (newStage[i].maxY - eachBlock.maxY)/times * (j + 1);
                     changingPos.push(specificPos)
                 }
                 movedBlocks[eachBlock.name] = changingPos
             }
         })
-        //console.log(movedBlocks)
+
         // draw 100 times, during 2 seconds, slash: 20ms
         let i = 0;
         if(this.handler) {
@@ -130,25 +132,33 @@ class PageFour extends React.Component {
                     const move = movedBlocks[block.name];
                     // I need to move
                     // Replace old x, y, with computed x, y (which will change per 20ms)
+                    // return block;
+
                     return {
                         ...block,
-                        x: move[i].x,
-                        y: move[i].y
-                    }
+                        minX: move[i].minX,
+                        maxX: move[i].maxX,
+                        maxY: move[i].maxY,
+                        minY: move[i].minY
+                    };
                 } else {
                     // Keep at original position
                     return block;
                 }
             })
+
             this.setState({
                 drawBlocks: [...newDrawBlocks]
             });
             i++;
-            //console.info(i, newDrawBlocks);
+            // console.info(i, newDrawBlocks);
 
-            if( i >= 50){
+            if( i >= times){
                 clearInterval(handler);
                 this.handler = false;
+                this.setState({
+                    drawBlocks: [...newStage]
+                });
             }
         }, 60/this.state.playSpeed);
         this.handler = handler;
@@ -170,6 +180,7 @@ class PageFour extends React.Component {
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         });
+        this.diff(index)
     }
 
     handleStepClick(value) {
@@ -189,6 +200,7 @@ class PageFour extends React.Component {
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         });
+        this.diff(index)
         //console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
@@ -207,6 +219,7 @@ class PageFour extends React.Component {
                 stepInfoIndex: previousIndex,
                 selectedSubGoals: map
             });
+            this.diff(previousIndex)
             //console.info('DOM:', this.stepItem[index]);
             this.stepItem[previousIndex].current.scrollIntoView();
         }
@@ -226,6 +239,7 @@ class PageFour extends React.Component {
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map
             });
+            this.diff(nextIndex)
            // console.info('DOM:', this.stepItem[index]);
             this.stepItem[nextIndex].current.scrollIntoView();
         }
@@ -236,7 +250,6 @@ class PageFour extends React.Component {
         if(nextIndex === steps.length) {
             alert("It's already the final state!")
         } else {
-            this.diff(nextIndex)
             const map = this.highlight(nextIndex)
             this.setState({
                 blockIndex: nextIndex,
@@ -245,6 +258,7 @@ class PageFour extends React.Component {
                 playButtonColor: 'default',
                 pauseButtonColor: 'primary'}
             )
+            this.diff(nextIndex)
             this.stepItem[nextIndex].current.scrollIntoView();
 
             nextIndex++;
@@ -253,8 +267,8 @@ class PageFour extends React.Component {
             }
             if(steps.length > nextIndex) {
                 const run = () => {
-                    this.diff(nextIndex)
                     const map = this.highlight(nextIndex)
+                    this.diff(nextIndex)
                     this.setState({
                         blockIndex: nextIndex,
                         stepInfoIndex: nextIndex,
@@ -275,12 +289,12 @@ class PageFour extends React.Component {
                     } else {
                         // setInterval effect
                         // detect change of playSpeed
-                        const handlerPlay = setTimeout(run, 1000/this.state.playSpeed);
+                        const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
                         this.handlerPlay = handlerPlay;
                     }
                 };
 
-                const handlerPlay = setTimeout(run, 1000/this.state.playSpeed);
+                const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
                 this.handlerPlay = handlerPlay;
             }
         }
@@ -365,9 +379,10 @@ class PageFour extends React.Component {
 
     render() {
         // Get all sprites
-        var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
+        // var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
+        var sprites = this.state.drawBlocks;
         // Sort sprites by their depth
-        sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
+         sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
     
         return (
             <div className={styles.container}>
@@ -404,7 +419,10 @@ class PageFour extends React.Component {
                                 // Get the texture name
                                 var textureName = sprite.prefabimage
                                 // Get the color of the sprite
-                                var color = utils.rgb2hex([sprite.color.r, sprite.color.g, sprite.color.b])
+                                var color = null
+                                if(sprite.color) {
+                                     color = utils.rgb2hex([sprite.color.r, sprite.color.g, sprite.color.b])
+                                }
                                 // Initialize the rotation of the sprite
                                 var rotation = 0
                                 // Initialize the x-axis coordinate position of the sprite
