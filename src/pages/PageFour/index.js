@@ -90,7 +90,8 @@ class PageFour extends React.Component {
         const previousStageIndex = this.state.blockIndex;
         const previousStage = allStages[previousStageIndex];
         const newStage = allStages[index];
-        const times = 20
+        const times = 20;
+        newStage.sort((itemA, itemB) => itemA.depth - itemB.depth);
         // this.setState({
         //     drawBlocks: [...newStage]
         // });
