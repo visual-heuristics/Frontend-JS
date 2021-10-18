@@ -376,7 +376,12 @@ class PageFour extends React.Component {
             playSpeed: value
         })
     }
-
+    
+    componentWillUnmount(){
+        if(this.handlerPlay) {
+            clearInterval(this.handlerPlay);
+        }
+    }
 
     render() {
         // Get all sprites
