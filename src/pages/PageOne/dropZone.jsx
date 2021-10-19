@@ -1,5 +1,5 @@
 import React from "react";
-import css from "./index.module.less";
+import css from "../../Styles/index.module.less";
 import { DropzoneArea } from "material-ui-dropzone";
 import Typography from "@material-ui/core/Typography";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export default function DropZone({ name, desc, fileType, onFileLoad }) {
       alert("Wrong file type");
     }
   };
-  // To change the inner tet when dorpping a file
+  // To change the inner text when dropping a file
   let dropText =
     files.length > 0
       ? files[0].name
