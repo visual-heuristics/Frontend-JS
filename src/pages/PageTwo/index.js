@@ -172,7 +172,7 @@ class PageTwo extends React.Component {
                 <Button variant="contained" color="default" onClick={this.handleOnClick} text-align="left">Cancel</Button>
                 <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
                     // eslint-disable-next-line no-restricted-globals
-                    location.href = '/page4';
+                    location.href = '/demo';
                 }} text-align="right">Continue</Button>
                 </div>
                 </Container>

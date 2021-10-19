@@ -139,7 +139,23 @@ export default function Home() {
 
   const handleOnClick = (num) => {
     setNum( num + 1 );
-    history.push('/page'+num);
+    switch(num){
+      case 1:
+        history.push('/problem');
+        break;
+      case 2:
+        history.push('/vfg');
+        break;
+      case 3:
+        window.open('https://planimation.github.io/documentation/')
+        break;
+      case 4:
+        history.push('/demo');
+        break;
+      default: return;
+    }
+
+    
   }
 
   return (

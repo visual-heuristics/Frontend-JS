@@ -28,14 +28,18 @@ const useStyles = makeStyles((theme) => ({
     link: {
       margin: theme.spacing(1, 1.5),
       cursor: 'pointer'
+    },
+    alink: {
+      color: '#ffffff',
+      textDecoration: 'none'
     }
   }));
 
 const nav = {
-    problem: '/page1',
-    vfg: '/page2',
-    manual: '/page3',
-    demo: '/page4',
+    problem: '/problem',
+    vfg: '/vfg',
+    manual: 'https://planimation.github.io/documentation/ ',
+    demo: '/demo',
     home: '/'
 };
 
@@ -46,7 +50,12 @@ function NavigationBar() {
     
     const handleClick = (url) => {
         setUrl(url);
-        history.push(nav[url]);
+        if(url==='manual'){
+          window.location.href(nav[url])
+        }else{
+          history.push(nav[url]);
+
+        }
     }
 
     return(
@@ -62,8 +71,8 @@ function NavigationBar() {
         <Link variant="button" color="inherit" onClick={()=>handleClick('vfg')} className={classes.link}>
           VFG
         </Link>
-        <Link variant="button" color="inherit" onClick={()=>handleClick('manual')} className={classes.link}>
-          User Manual
+        <Link variant="button" color="inherit" className={classes.link}>
+          <a href={'https://planimation.github.io/documentation/'} target='_blank' rel="noreferrer" className={classes.alink}>User Manual</a>
         </Link>
         <Link variant="button" color="inherit" onClick={()=>handleClick('demo')} className={classes.link}>
           Demo
