@@ -20,7 +20,7 @@ class PageOne extends React.Component {
 
     handleStore = (content)=> {
         localStorage.setItem('fileContent', content);
-        window.location.href = '/page4';
+        window.location.href = '/demo';
     }
 
     handleNewURL = (urlString) => {

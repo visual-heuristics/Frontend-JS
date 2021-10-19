@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import css from "../../Styles/index.module.less";
 import Alert from "../../components/alertInFormat";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
  * Three DropZones and Upload button to fetch pddl to server
@@ -16,6 +17,7 @@ import Alert from "../../components/alertInFormat";
 export default function DropAndFetch({ onStore, onClick, newURL }) {
   const [dataFiles, setDataFiles] = useState({});
   const [showAlert, setAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const dragsAndDrops = [
     {
@@ -47,6 +49,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       formData.append(name, files[name]);
     }
     try {
+      setLoading(true);
       const resp = await fetch(
         "https://planimation.planning.domains/upload/pddl",
         {
@@ -61,6 +64,8 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       onStore(txt);
     } catch (error) {
       alert(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +107,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
               onFileLoad={handleFileLoad}
             />
           ))}
+          {loading && <div className={css.loadingBox} />}
         </Container>
         <Container maxWidth="sm" component="main">
           <div className={css.buttonBox}>
@@ -112,14 +118,20 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
             >
               Cancel
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<CloudUploadIcon />}
-              onClick={handleSubmit}
-            >
-              Upload Files
-            </Button>
+            <div className={css.wrapper}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CloudUploadIcon />}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                Upload Files
+              </Button>
+              {loading && (
+                <CircularProgress size={24} className={css.loading} />
+              )}
+            </div>
           </div>
         </Container>
         <Alert open={showAlert} reset={handleResetAlert} severity="warning">
