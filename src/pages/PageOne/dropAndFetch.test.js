@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM, {render, unmountComponentAtNode} from 'react-dom';
 import DropAndFetch from './dropAndFetch';
+import { act } from "react-dom/test-utils";
+import { constant } from 'lodash';
+
 
 
 
@@ -30,8 +33,8 @@ describe('pageOne dropAndFetch: rendering correctly', () =>{
     it("DropZone component inside DropAndFetch renders correctly", () =>{
         ReactDOM.render(<DropAndFetch
             />, container);
-        console.log(container.querySelector("dropzone"));
-        expect(getByText(/dropZone/i)).toBeInTheDocument();
+        //Renders dropzone icon
+        expect(container.querySelector("svg")).toBeInTheDocument();
     });
 })
 
@@ -41,6 +44,7 @@ describe('pageOne dropAndFetch: fetch correctly', () =>{
         // setup a DOM element as a render target
         container = document.createElement("div");
         document.body.appendChild(container);
+        //fetch.resetMocks();
     });
       
     afterEach(() => {
@@ -51,22 +55,29 @@ describe('pageOne dropAndFetch: fetch correctly', () =>{
     });
 
 
-    it('UploadPDDL fetch works correctly', () =>{
-        const fakePDDL = {};
-
-        jest.spyOn(global, 'fetch').mockImplementation(() =>
-            Promise.resolve({
-                json: () => Promise.resolve(fakePDDL)
+    it('UploadPDDL fetch works correctly', async () =>{
+        const fakevfg = {vfg: 'correct'};
+        global.fetch = jest.fn(() =>
+        Promise.resolve({
+                json: () => Promise.resolve(fakevfg)
             })
         );
         
+        React.useState = jest.fn()
+        .mockReturnValueOnce([{domain: '',problem:'',animation:''},{}])
+        .mockReturnValueOnce([false, ()=>{}])
+        .mockReturnValueOnce([false, ()=>{}]);
+
+        const handleStore = (content) => {
+            expect(content).toMatch(JSON.stringify({vfg: 'correct'}));
+        }
+
         // Use the asynchronous version of act to apply resolved promises
         await act(async () => {
-            render(<DropAndFetch />, container);
-            container.getByText('Upload Files').simulate('click');  
+            render(<DropAndFetch onStore={handleStore} newURL={''}/>, container);  
         });
-        
-        expect(true).toBe(true);
+
+        container.querySelector("button[class~='MuiButton-containedPrimary']").click();
         global.fetch.mockRestore();
     })
 })

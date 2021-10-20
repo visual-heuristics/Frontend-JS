@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { makeStyles } from '@material-ui/core/styles';
 import css from '../../Styles/index.module.less';
+import Alert from '../../components/alertInFormat'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,33 +55,45 @@ class PageTwo extends React.Component {
 
     this.state = {
         // data that will be used/changed in render function
-        files: []
+        files: [],
+        alertURL: false,
+        alertMessage: ''
     }
     // Every function that interfaces with UI and data used 
     // in this class needs to bind like this:
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
+  handleAlert = (message) => {
+    const state = {...this.state};
+    state.alertURL = true;
+    state.alertMessage = message;
+    this.setState(state);
+  }
+  
+  handleResetAlert = () => {
+    const state = {...this.state};
+    state.alertURL = false;
+    this.setState(state)
+  }
+
   readFileContent(fileHandler) {
+    const state = {...this.state};
     if(!FileReader) {
-        alert('Browser not support FileReader object');
-        this.setState({
-            Files: []
-          });
+      this.handleAlert('Browser not support FileReader object');
+      state.files = [];
+      this.setState(state);
         return;
     }
 
     if(!fileHandler.name.toLowerCase().endsWith('.vfg')) {
-        alert('Please choose *.vfg file to continue process');
-        this.setState({
-            Files: []
-          });
+        this.handleAlert('Please choose *.vfg file to continue process');
+        state.files = [];
+        this.setState(state);
         return;
     }
-
-    this.setState({
-        Files: [fileHandler]
-    });
+    state.files = [fileHandler];
+    this.setState(state);
 
     const reader = new FileReader();
     reader.onload = function fileReadCompleted() {
@@ -105,6 +118,16 @@ handleFileChange(files) {
         this.readFileContent(fileHandler);
     }
 }
+
+handleContinue() {
+    console.log(this.state.files.length);
+    if(this.state.files.length > 1){
+      window.location.href = '/demo';
+    } else {
+      this.handleAlert("No file to process")
+    } 
+}
+
     
 render() {
   return (
@@ -127,13 +150,13 @@ render() {
           <Container maxWidth="sm" component="main">
             <div className={css.btnBoxVFG}>
               <Button variant="contained" color="default" onClick={this.handleOnClick} text-align="left">Cancel</Button>
-              <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
-                // eslint-disable-next-line no-restricted-globals
-                location.href = '/demo';
-              }} text-align="right">Continue</Button>
+              <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>this.handleContinue()} text-align="right">Continue</Button>
             </div>
           </Container>
         </div>
+        <Alert open={this.state.alertURL} reset={this.handleResetAlert} severity="warning">
+                    {this.state.alertMessage}
+        </Alert>
       </React.Fragment>
     );
   }   
