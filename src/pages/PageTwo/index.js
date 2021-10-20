@@ -125,7 +125,7 @@ render() {
           </Container>
 
           <Container maxWidth="sm" component="main">
-            <div className={css.buttonBox}>
+            <div className={css.btnBoxVFG}>
               <Button variant="contained" color="default" onClick={this.handleOnClick} text-align="left">Cancel</Button>
               <Button  variant="contained" color="primary"  startIcon={<CloudUploadIcon />} onClick={()=>{
                 // eslint-disable-next-line no-restricted-globals
