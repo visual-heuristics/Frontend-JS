@@ -8,22 +8,20 @@ import React from "react";
  * Display Alert in MUI format
  * @param {Boolean} open: if Alert box is displayed or not
  * @param {function} reset: reset open value in parent component
- * @param {*} props: Additional params
+ * @param {*} props: other props for MIU Alert
  * @returns Alert message in MUI format
  */
 export default function Alert(props) {
-  const { open, reset } = props;
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    reset();
+    props.reset();
   };
 
   return (
     <Snackbar
-      open={open}
+      open={props.open}
       onClose={handleClose}
       autoHideDuration={6000}
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}

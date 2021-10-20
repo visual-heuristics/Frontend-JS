@@ -15,9 +15,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
  * @returns
  */
 export default function DropAndFetch({ onStore, onClick, newURL }) {
-  const [dataFiles, setDataFiles] = useState({});
-  const [showAlert, setAlert] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [dataFiles, setDataFiles] = React.useState({});
+  const [showAlert, setAlert] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const dragsAndDrops = [
     {
@@ -48,6 +48,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
     for (const name in files) {
       formData.append(name, files[name]);
     }
+
     try {
       setLoading(true);
       const resp = await fetch(
@@ -58,19 +59,19 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
           body: formData, // Dataformat
         }
       );
-
       const data = await resp.json();
       const txt = JSON.stringify(data);
       onStore(txt);
     } catch (error) {
-      alert(error);
+      console.log(error);
+      setAlert(error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleResetAlert = () => {
-    setAlert(false);
+    setAlert("");
   };
 
   const handleSubmit = () => {
@@ -86,7 +87,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       uploadPDDL(dataFiles);
     } else {
       console.log("Some files are missing");
-      setAlert(true);
+      setAlert("Some files are missing");
     }
   };
 
@@ -134,8 +135,12 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
             </div>
           </div>
         </Container>
-        <Alert open={showAlert} reset={handleResetAlert} severity="warning">
-          "Some files are missing"
+        <Alert
+          open={showAlert.length > 1 ? true : false}
+          reset={handleResetAlert}
+          severity="warning"
+        >
+          {showAlert}
         </Alert>
       </div>
     </React.Fragment>

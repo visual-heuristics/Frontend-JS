@@ -16,7 +16,7 @@ export default function DropZone({ name, desc, fileType, onFileLoad }) {
   const [files, setFile] = useState([]);
 
   const onDrop = (file) => {
-    //Format chekcs
+    //Format checks
     if (file.length !== 1) {
       alert("More than one file, retry");
     }
@@ -35,9 +35,8 @@ export default function DropZone({ name, desc, fileType, onFileLoad }) {
   // To change the inner text when dropping a file
   let dropText =
     files.length > 0
-      ? files[0].name
-      : "Drag and drop " + name?.toLowerCase() + fileType ??
-        "--" + " here or click";
+      ? files[0].path
+      : "Drag and drop " + name?.toLowerCase() + fileType + " here or click";
 
   return (
     <div className={css.dropzoneBox}>
