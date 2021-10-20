@@ -199,7 +199,7 @@ export default function Home() {
                   </div> */}
                   <ul className={classes.itemTitle}>
                     {tier.description.map((line) => (
-                      <Typography component="li" variant="subtitle1" align="center" key={line}>
+                      <Typography variant="subtitle1" align="center" key={line}>
                         {line}
                       </Typography>
                     ))}
