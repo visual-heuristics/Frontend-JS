@@ -16,21 +16,21 @@ describe('user student E2E', () =>{
         cy.contains("Some files are missing").parent().find('button').click()
         //Upload files
         cy.fixture('./demoData/Blockworld_domain_normal.pddl').then(fileContent => {
-            cy.get('input[type="file"]').attachFile({
+            cy.contains('Domain File').parent().parent().parent().find('input[type="file"]').attachFile({
                 fileContent: fileContent.toString(),
                 fileName: 'Blockworld_domain_normal.pddl',
                 mimeType: 'file'
             });
         });
         cy.fixture('./demoData/Blockworld_problem_normal.pddl').then(fileContent => {
-            cy.contains('Problem File').parentsUntil('div').parent().find('input[type="file"]').attachFile({
+            cy.contains('Problem File').parent().parent().parent().find('input[type="file"]').attachFile({
                 fileContent: fileContent.toString(),
                 fileName: 'Blockworld_problem_normal.pddl',
                 mimeType: 'file'
             });
         });
         cy.fixture('./demoData/Blocksworld_AP.pddl').then(fileContent => {
-            cy.contains('Animation File').parentsUntil('div').parent().find('input[type="file"]').attachFile({
+            cy.contains('Animation File').parent().parent().parent().find('input[type="file"]').attachFile({
                 fileContent: fileContent.toString(),
                 fileName: 'Blocksworld_AP.pddl',
                 mimeType: 'file'
@@ -42,6 +42,6 @@ describe('user student E2E', () =>{
         cy.contains('Upload Files').click()
         cy.wait(5000)
 
-        cy.get('div[style="height: 50px;"]').should("be.visible")
+        cy.get('canvas').should("be.visible")
     })
 })
