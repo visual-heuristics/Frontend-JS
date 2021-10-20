@@ -1,7 +1,8 @@
 import React from "react";
 import {Stage, Text, Sprite} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent} from './dataUtils';
+import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent,
+        getAllStages, getSteps, getStepInfo, getSubGoal, getStepSubgoalMap} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -14,15 +15,9 @@ import Slider from '@material-ui/core/Slider';
 import styles from './index.less';
 import * as PIXI from 'pixi.js'
 
-const canvasWidth_Middle = 800
-const canvasHeight_Middle = 470
+// const canvasWidth = 800
+// const canvasHeight = 470
 
-const useStyles = makeStyles({
-    root: {
-      width: 300,
-    },
-});
-  
 function valuetext(value) {
     return `${value}`;
 }
@@ -37,31 +32,45 @@ class PageFour extends React.Component {
             this.stepItem[i] = React.createRef();
         })
 
+
         this.state = {
             // data that will be used/changed in render function
-            blockIndex: 0,
+            stageIndex: 0,
             stepInfoIndex: 0,
             showKey: '',
             showPlayButton: true,
             selectedSubGoals: {},
-            drawBlocks: allStages[0],
+            drawSprites: allStages[0],
             playSpeed: 3,
             playButtonColor: 'primary',
-            pauseButtonColor: 'default'
+            pauseButtonColor: 'default',
+            canvasWidth: 720,
+            canvasHeight: 470,
         }
 
         // Every function that interfaces with UI and data used
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+        this.receiveMessageFromPlugin = this.receiveMessageFromPlugin.bind(this);
     }
+
+    updateWindowDimensions() {
+        if(this.refDom){
+            const {clientWidth, clientHeight} = this.refDom;
+            const tmp_width = Math.max(clientWidth - 550, 720)
+            this.setState({ canvasWidth: tmp_width, canvasHeight: Math.min(tmp_width / 2, clientHeight - 120)  },(val)=>{
+                console.log('client.inner',clientWidth, clientHeight);
+            });
+        }
+      }
 
     handleOnClick() {
         this.props.history.push('/')
     }
 
     handleSubItemClick(key) {
-        //console.info("handleSubItemClick(), ", key);
-        // this.state.blockIndex = index;
+        // this.state.stageIndex = index;
         if(this.state.showKey !== key) {
             this.setState({
                 showKey: key,
@@ -74,6 +83,39 @@ class PageFour extends React.Component {
     }
 
     componentDidMount() {
+        this.updateWindowDimensions();
+        this.refDom.addEventListener('resize', this.updateWindowDimensions);
+        // this.data = {
+        //     action: 'loadfile'
+        // }
+        // window.parent && window.parent.postMessage(this.data, '*')
+        // window.addEventListener("message", this.receiveMessageFromPlugin, false)
+
+    }
+
+    receiveMessageFromPlugin ( event ) {
+        if(event.origin!= "http://localhost:3000"){
+            console.log( 'iframe is working:', event.origin );
+        let contentObject = {};
+
+        const content = localStorage.getItem('fileContent');
+        if(content) {
+            contentObject = JSON.parse(content);
+            allStages = getAllStages();
+            steps = getSteps();
+            stepInfo =  getStepInfo();
+            subGoal = getSubGoal();
+            stepSubgoalMap = getStepSubgoalMap();
+            vfg = contentObject;
+            textContent = content
+
+            this.stepItem = {};
+            steps.forEach((step, i) => {
+                this.stepItem[i] = React.createRef();
+            })
+            this.setState({drawSprites: allStages[0]})
+        }
+        }
     }
 
     highlight(index) {
@@ -85,39 +127,38 @@ class PageFour extends React.Component {
         return map;
     }
 
-    diff(index) {
-        // 2 sets of blocks
-        const previousStageIndex = this.state.blockIndex;
+    animation(index) {
+        // 2 sets of sprites
+        const previousStageIndex = this.state.stageIndex;
         const previousStage = allStages[previousStageIndex];
         const newStage = allStages[index];
         const times = 20;
         newStage.sort((itemA, itemB) => itemA.depth - itemB.depth);
         // this.setState({
-        //     drawBlocks: [...newStage]
+        //     drawSprites: [...newStage]
         // });
         //
         // requestAnimationFrame(() => {
         //
         // })
 
-        const movedBlocks = {};
-        previousStage.map((eachBlock, i) => {
-            if(eachBlock.name !== newStage[i].name) return
-            if(eachBlock.x !== newStage[i].x || eachBlock.y !== newStage[i].y) {
-                // 10
-                // { blockId => [{x:x1,y:y1}, {x: x2, y: y2}, , x3, .... x10] }
+        const movedSprites = {};
+        previousStage.map((eachSprite, i) => {
+            if(eachSprite.name !== newStage[i].name) return
+            if(eachSprite.x !== newStage[i].x || eachSprite.y !== newStage[i].y) {
+                // { spriteId => [{x:x1,y:y1}, {x: x2, y: y2}, , x3, .... x10] }
                 const changingPos = [];
                 for (let j = 0; j < times; j++) {
                     const specificPos = {}
-                    // specificPos.x = eachBlock.x + (newStage[i].x - eachBlock.x)/50 * (j + 1)
-                    // specificPos.y = eachBlock.y + (newStage[i].y - eachBlock.y)/50 * (j + 1)
-                    specificPos.minX = eachBlock.minX + (newStage[i].minX - eachBlock.minX)/times * (j + 1);
-                    specificPos.maxX = eachBlock.maxX + (newStage[i].maxX - eachBlock.maxX)/times * (j + 1);
-                    specificPos.minY = eachBlock.minY + (newStage[i].minY - eachBlock.minY)/times * (j + 1);
-                    specificPos.maxY = eachBlock.maxY + (newStage[i].maxY - eachBlock.maxY)/times * (j + 1);
+                    // specificPos.x = eachSprite.x + (newStage[i].x - eachSprite.x)/50 * (j + 1)
+                    // specificPos.y = eachSprite.y + (newStage[i].y - eachSprite.y)/50 * (j + 1)
+                    specificPos.minX = eachSprite.minX + (newStage[i].minX - eachSprite.minX)/times * (j + 1);
+                    specificPos.maxX = eachSprite.maxX + (newStage[i].maxX - eachSprite.maxX)/times * (j + 1);
+                    specificPos.minY = eachSprite.minY + (newStage[i].minY - eachSprite.minY)/times * (j + 1);
+                    specificPos.maxY = eachSprite.maxY + (newStage[i].maxY - eachSprite.maxY)/times * (j + 1);
                     changingPos.push(specificPos)
                 }
-                movedBlocks[eachBlock.name] = changingPos
+                movedSprites[eachSprite.name] = changingPos
             }
         })
 
@@ -127,16 +168,16 @@ class PageFour extends React.Component {
             clearInterval(this.handler);
         }
         const handler = setInterval(()=>{
-            const newDrawBlocks = previousStage.map( block => {
-                // block -> block.id
-                if(movedBlocks[block.name]) {
-                    const move = movedBlocks[block.name];
+            const newDrawSprites = previousStage.map( sprite => {
+                // sprite -> sprite.id
+                if(movedSprites[sprite.name]) {
+                    const move = movedSprites[sprite.name];
                     // I need to move
                     // Replace old x, y, with computed x, y (which will change per 20ms)
-                    // return block;
+                    // return sprite;
 
                     return {
-                        ...block,
+                        ...sprite,
                         minX: move[i].minX,
                         maxX: move[i].maxX,
                         maxY: move[i].maxY,
@@ -144,104 +185,96 @@ class PageFour extends React.Component {
                     };
                 } else {
                     // Keep at original position
-                    return block;
+                    return sprite;
                 }
             })
 
             this.setState({
-                drawBlocks: [...newDrawBlocks]
+                drawSprites: [...newDrawSprites]
             });
             i++;
-            // console.info(i, newDrawBlocks);
 
             if( i >= times){
                 clearInterval(handler);
                 this.handler = false;
                 this.setState({
-                    drawBlocks: [...newStage]
+                    drawSprites: [...newStage]
                 });
             }
         }, 60/this.state.playSpeed);
         this.handler = handler;
     };
 
-    handleSwitchStage(index) {
-        // Get Stage[index] blocks, and display
-        //console.info("handleSwitchStage(), ", index);
+    handleStepsClick(index) {
+        // Get Stage[index] sprites, and display
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
-        this.diff(index)
+        this.animation(index)
         const map = this.highlight(index)
 
         this.setState({
-            blockIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         });
-        this.diff(index)
+        this.animation(index)
     }
 
-    handleStepClick(value) {
-        //console.info("handleStepClick", value);
+    handleSubgoalStepItemClick(value) {
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
         const index = Number(value);
 
-        this.diff(index)
+        this.animation(index)
         const map = this.highlight(index)
 
         this.setState({
-            blockIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         });
-        this.diff(index)
-        //console.info('DOM:', this.stepItem[index]);
+        this.animation(index)
         this.stepItem[index].current.scrollIntoView();
     }
 
     handlePreviousClick(value) {
-        //console.info("handlePreviousClick", value);
         const previousIndex = Number(value) - 1;
         if (previousIndex < 0) {
             alert("It's already the initial state!")
         }
         else{
-            this.diff(previousIndex)
+            this.animation(previousIndex)
             const map = this.highlight(previousIndex)
             this.setState({
-                blockIndex: previousIndex,
+                stageIndex: previousIndex,
                 stepInfoIndex: previousIndex,
                 selectedSubGoals: map
             });
-            this.diff(previousIndex)
-            //console.info('DOM:', this.stepItem[index]);
+            this.animation(previousIndex)
             this.stepItem[previousIndex].current.scrollIntoView();
         }
     }
 
     handleNextClick(value) {
-        //console.info("handleNextClick", value);
         const nextIndex = Number(value) + 1
         if (nextIndex >= steps.length) {
             alert("It's already the final state!")
         }
         else{
-            this.diff(nextIndex)
+            this.animation(nextIndex)
             const map = this.highlight(nextIndex)
             this.setState({
-                blockIndex: nextIndex,
+                stageIndex: nextIndex,
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map
             });
-            this.diff(nextIndex)
-           // console.info('DOM:', this.stepItem[index]);
+            this.animation(nextIndex)
             this.stepItem[nextIndex].current.scrollIntoView();
         }
     }
@@ -253,13 +286,13 @@ class PageFour extends React.Component {
         } else {
             const map = this.highlight(nextIndex)
             this.setState({
-                blockIndex: nextIndex,
+                stageIndex: nextIndex,
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map,
                 playButtonColor: 'default',
                 pauseButtonColor: 'primary'}
             )
-            this.diff(nextIndex)
+            this.animation(nextIndex)
             this.stepItem[nextIndex].current.scrollIntoView();
 
             nextIndex++;
@@ -269,9 +302,9 @@ class PageFour extends React.Component {
             if(steps.length > nextIndex) {
                 const run = () => {
                     const map = this.highlight(nextIndex)
-                    this.diff(nextIndex)
+                    this.animation(nextIndex)
                     this.setState({
-                        blockIndex: nextIndex,
+                        stageIndex: nextIndex,
                         stepInfoIndex: nextIndex,
                         selectedSubGoals: map
                     })
@@ -290,12 +323,12 @@ class PageFour extends React.Component {
                     } else {
                         // setInterval effect
                         // detect change of playSpeed
-                        const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                        const handlerPlay = setTimeout(run, 2700/this.state.playSpeed);
                         this.handlerPlay = handlerPlay;
                     }
                 };
 
-                const handlerPlay = setTimeout(run, 3000/this.state.playSpeed);
+                const handlerPlay = setTimeout(run, 2700/this.state.playSpeed);
                 this.handlerPlay = handlerPlay;
             }
         }
@@ -315,10 +348,10 @@ class PageFour extends React.Component {
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
-        this.diff(0)
+        this.animation(0)
         const map = this.highlight(0)
         this.setState( {
-            blockIndex: 0,
+            stageIndex: 0,
             stepInfoIndex: 0,
             selectedSubGoals: map,
             playButtonColor: 'primary',
@@ -327,22 +360,20 @@ class PageFour extends React.Component {
         this.stepItem[0].current.scrollIntoView();
     }
 
-    handleShowGoalClick(){
-        //console.info("handleShowGoalClick");
+    handleShowFinalGoalClick(){
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
         const index = Number(steps.length) - 1;
-        this.diff(index)
+        this.animation(index)
         const map = this.highlight(index)
         this.setState( {
-            blockIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
             pauseButtonColor: 'default'
         })
-       // console.info('DOM:', this.stepItem[index]);
         this.stepItem[index].current.scrollIntoView();
     }
 
@@ -370,28 +401,30 @@ class PageFour extends React.Component {
         }
     }
 
-    handleSpeedScroll(value){
-        // console.info(value);
+    handleSpeedControllor(value){
         this.setState({
             playSpeed: value
         })
     }
     
+    // prevent crash when jumping  to other pages during the animation playing
     componentWillUnmount(){
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
+        this.refDom.removeEventListener('resize', this.updateWindowDimensions);
+        // window.removeEventListener("message", this.receiveMessageFromPlugin, false);
     }
 
     render() {
         // Get all sprites
         // var sprites = vfg.visualStages[this.state.stepInfoIndex].visualSprites;
-        var sprites = this.state.drawBlocks;
+        var sprites = this.state.drawSprites;
         // Sort sprites by their depth
-         sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
+         sprites && sprites.sort((itemA, itemB) => itemA.depth - itemB.depth)
     
         return (
-            <div className={styles.container}>
+            <div className={styles.container} ref={(ref)=>this.refDom=ref}>
                 <div className={styles.left}>
                     <div className={styles.sub_title}> Steps </div>
                     <div className={styles.left_upper}>
@@ -399,7 +432,7 @@ class PageFour extends React.Component {
                             steps && steps.map((step, i) => {
                                 return <div className={styles.stage_item}
                                             style={{backgroundColor: i === this.state.stepInfoIndex ? '#eef': 'white'}}
-                                            onClick={()=>{this.handleSwitchStage(i);}}
+                                            onClick={()=>{this.handleStepsClick(i);}}
                                             ref={this.stepItem[i]}
                                             key={i}>
                                     <ul><li className={styles.stage_li} >{i + '. ' + step}</li></ul>
@@ -407,21 +440,27 @@ class PageFour extends React.Component {
                             })
                         }
                     </div>
-                    <div>
+                    <div className={styles.sub_title}> Step Info </div>
+                    <div className={styles.step_info}>
+                    {
+                        stepInfo[this.state.stepInfoIndex]
+                    }
+                    </div>
+                    {/* <div>
                         <div className={styles.sub_title}> Step Info </div>
                         <div className={styles.step_info}>
                         {
                             stepInfo[this.state.stepInfoIndex]
                         }
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={styles.middle}>
-                    <Stage width={canvasWidth_Middle} height={canvasHeight_Middle}
+                    <Stage width={this.state.canvasWidth} height={this.state.canvasHeight}
                            options={{backgroundColor: 0xffffff}} key={'main-graph'}>
                         {
                             
-                            sprites.map((sprite, i) => {
+                            sprites && sprites.map((sprite, i) => {
                                 // Get the texture name
                                 var textureName = sprite.prefabimage
                                 // Get the color of the sprite
@@ -432,17 +471,17 @@ class PageFour extends React.Component {
                                 // Initialize the rotation of the sprite
                                 var rotation = 0
                                 // Initialize the x-axis coordinate position of the sprite
-                                var x = sprite.minX * canvasHeight_Middle
+                                var x = sprite.minX * this.state.canvasHeight
                                 // Initialize the y-axis coordinate position of the sprite
-                                var y = canvasHeight_Middle - sprite.maxY * canvasHeight_Middle
+                                var y = this.state.canvasHeight - sprite.maxY * this.state.canvasHeight
                                 // Initialize the anchor (i.e. the origin point) of the sprite
                                 var anchor = (0, 0)
                                 // Update the anchor, rotation, (x,y) location if the sprite need to be rotated
                                 if ('rotate' in sprite){
                                     anchor = (0.5, 0.5)
                                     rotation = sprite.rotate * Math.PI / 180;
-                                    x = sprite.minX * canvasHeight_Middle + (sprite.maxX - sprite.minX) * canvasHeight_Middle/2
-                                    y = canvasHeight_Middle - sprite.minY * canvasHeight_Middle
+                                    x = sprite.minX * this.state.canvasHeight + (sprite.maxX - sprite.minX) * this.state.canvasHeight/2
+                                    y = this.state.canvasHeight - sprite.minY * this.state.canvasHeight
                                 }
                                 // Draw the sprite with a text
                                 if (sprite.showname) {
@@ -456,8 +495,8 @@ class PageFour extends React.Component {
                                                 rotation = {rotation}
                                                 x = {x}
                                                 y = {y}
-                                                width = {(sprite.maxX - sprite.minX) * canvasHeight_Middle}
-                                                height = {(sprite.maxY - sprite.minY) * canvasHeight_Middle}
+                                                width = {(sprite.maxX - sprite.minX) * this.state.canvasHeight}
+                                                height = {(sprite.maxY - sprite.minY) * this.state.canvasHeight}
                                                 tint = {color}
                                             />
                                             <Text
@@ -465,8 +504,8 @@ class PageFour extends React.Component {
                                                 text = {sprite.name}
                                                 style = {{fontFamily: 'Arial', fontSize: 16, fill: 0x000000}}
                                                 anchor = {(0.5, 0.5)}
-                                                x = {x + (sprite.maxX - sprite.minX) * canvasHeight_Middle / 2}
-                                                y = {y + (sprite.maxY - sprite.minY) * canvasHeight_Middle / 2}
+                                                x = {x + (sprite.maxX - sprite.minX) * this.state.canvasHeight / 2}
+                                                y = {y + (sprite.maxY - sprite.minY) * this.state.canvasHeight / 2}
                                             />
                                         </>
                                     )
@@ -482,8 +521,8 @@ class PageFour extends React.Component {
                                                 rotation = {rotation}
                                                 x = {x}
                                                 y = {y}
-                                                width = {(sprite.maxX - sprite.minX) * canvasHeight_Middle}
-                                                height = {(sprite.maxY - sprite.minY) * canvasHeight_Middle}
+                                                width = {(sprite.maxX - sprite.minX) * this.state.canvasHeight}
+                                                height = {(sprite.maxY - sprite.minY) * this.state.canvasHeight}
                                                 tint = {color}
                                             />
                                         </>
@@ -492,7 +531,8 @@ class PageFour extends React.Component {
                             })
                         }
                     </Stage>
-                    <div style={{height:'50px'}}>
+                    <div className={styles.btn_box}>
+                    <div>
                         <IconButton color="primary" style={{float:'left', marginLeft:'6%', marginRight:'5%'}} onClick={()=>{this.handlePreviousClick(this.state.stepInfoIndex);}}>
                             <SkipPreviousIcon fontSize="large" />
                         </IconButton>
@@ -509,7 +549,7 @@ class PageFour extends React.Component {
                             <ReplayIcon fontSize="medium" />
                         </IconButton>
                         <ul>Speed:</ul>
-                        <Slider onChange={(event, newValue) => {this.handleSpeedScroll(newValue);}}
+                        <Slider onChange={(event, newValue) => {this.handleSpeedControllor(newValue);}}
                             defaultValue={3}
                             getAriaValueText={valuetext}
                             aria-labelledby="speed-slider"
@@ -519,14 +559,15 @@ class PageFour extends React.Component {
                             max={5}
                             valueLabelDisplay="auto"
                             style={{width: '150px'}}
-                           // onChangeCommitted={this.handleSpeedScroll()}
+                           // onChangeCommitted={this.handleSpeedControllor()}
                         />
+                    </div>
                     </div>
                 </div>
                 
                 <div className={styles.right}>
-                    <div style={{marginTop:'5px', marginBottom:'5px'}}>
-                        <Button variant="contained" color="primary" size="small" onClick={()=> {this.handleShowGoalClick()}}>
+                    <div style={{marginTop:'5px', marginBottom:'5px', width: '220px'}}>
+                        <Button variant="contained" color="primary" size="small" onClick={()=> {this.handleShowFinalGoalClick()}}>
                             Show the Goal
                         </Button>
                         &nbsp;&nbsp;
@@ -534,12 +575,12 @@ class PageFour extends React.Component {
                             Export
                         </Button>
                     </div>
-                    <div className={styles.sub_title}>
-                        <div className={styles.sub_title_key}>Subgoal</div>
-                        <div className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/{subGoal.size}</div>
+                    <div className={styles.sub_title} style={{position: 'relative'}}>
+                        <span className={styles.sub_title_key}>Subgoal</span>
+                        <span className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/{subGoal.size}</span>
                     </div>
                     <div className={styles.sub_list}>
-                        {
+                        {   sprites &&
                             [...subGoal.keys()].map(key => {
                                 return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : ' ')}
                                             key={key} onClick={()=> {this.handleSubItemClick(key)}}>
@@ -548,7 +589,7 @@ class PageFour extends React.Component {
                                             style={{display: this.state.showKey === key ? 'block': 'none'}}>
                                             {subGoal.get(key).map(value => {
                                                 return <div className={styles.sub_item_menu_item}
-                                                            onClick={()=>this.handleStepClick(value)}
+                                                            onClick={()=>this.handleSubgoalStepItemClick(value)}
                                                             key={key + value}
                                                 >Step {value}</div>
                                             })}

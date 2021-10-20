@@ -12,6 +12,7 @@ class PageOne extends React.Component {
         super(props);
         this.state = {url:'',fineUrl:'',alertURL:false, alertMessage: ''};
         this.handleOnClick = this.handleOnClick.bind(this);
+        this.handleSendURL = this.handleSendURL.bind(this);
     }
 
     handleOnClick() {
@@ -32,7 +33,8 @@ class PageOne extends React.Component {
     handleSendURL = () => {
         const state = {...this.state};
         const url = state.url;
-        const pattern = new RegExp('^(https?:\\/\\/)?','i');
+        const pattern = /^((http|https):\/\/)?(([A-Za-z0-9]+-[A-Za-z0-9]+|[A-Za-z0-9]+)\.)+([A-Za-z]+)[/\?\:]?.*$/;
+
         if (!!pattern.test(url)){
             state['fineUrl'] = url;
         this.setState(state);
@@ -84,7 +86,7 @@ class PageOne extends React.Component {
                         </Button>
                     </div>
                 </form>          
-                <div style={{marginTop:"5%"}}>
+                <div>
                     <h3 className={css.text}>
                         Step 2 - Upload Problem, Domain and Animation Profile Files
                     </h3>

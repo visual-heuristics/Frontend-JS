@@ -40,16 +40,17 @@ export default function DropZone({ name, desc, fileType, onFileLoad }) {
 
   return (
     <div className={css.dropzoneBox}>
-      <Typography variant="h6" align="center" color="textPrimary" component="p">
-        <b>{name} File </b>
-        <br />
-        {desc}
-      </Typography>
+      <div>
+        <div className={css.fileTitle}><b>{name} File </b></div>
+        <div className={css.fileDesc}>{desc}</div>
+      </div>
       <DropzoneArea
         acceptedFiles={[".pddl"]}
         filesLimit={1}
         onDrop={(file) => onDrop(file)}
         dropzoneText={dropText}
+        className={css.dropzoneAreaBox}
+        // maxWidth={'320px'}
       />
     </div>
   );
