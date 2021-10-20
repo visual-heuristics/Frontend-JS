@@ -3,42 +3,14 @@ import DropAndFetch from "./dropAndFetch";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Alert from '../../components/alertInFormat';
+import css from '../../Styles/index.module.less';
 
-
-const container = {
-	width: "100%",
-	height: "calc(100% - 65px)",
-	backgroundColor: "#FFFFFF",
-    overflow: 'auto'
-}
-
-const header = {
-	width: "100%",
-	height: "50px",
-	backgroundColor: "#20477A"
-}
-
-const subtitle = {
-	width: "90%",
-	height: "5%",
-    textAlign: 'left',
-    fontWeight: 'bold',
-    color: '#fff',
-    letterSpacing: '2px',
-    float: 'left',
-    marginTop: '0px',
-	marginLeft: '25px',
-}
-
-const text = {
-    textAlign: 'left',
-    margin: '10px 25%'
-}
 
 class PageOne extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {url:'',fineUrl:'',};
+        this.state = {url:'',fineUrl:'',alertURL:false, alertMessage: ''};
         this.handleOnClick = this.handleOnClick.bind(this);
     }
 
@@ -58,15 +30,28 @@ class PageOne extends React.Component {
     }
 
     handleSendURL = () => {
-        const stt = {...this.state};
-        const url = stt.url;
+        const state = {...this.state};
+        const url = state.url;
         const pattern = new RegExp('^(https?:\\/\\/)?','i');
         if (!!pattern.test(url)){
-            stt['fineUrl'] = url;
-        this.setState(stt);
+            state['fineUrl'] = url;
+        this.setState(state);
         } else {
-        alert('The URL is not valid');
+            this.handleAlert('The URL is not valid'); 
         }
+    }
+
+    handleAlert = (message) => {
+        const state = {...this.state};
+        state.alertURL = true;
+        state.alertMessage = message;
+        this.setState(state);
+    }
+
+    handleResetAlert = () => {
+        const state = {...this.state};
+        state.alertURL = false;
+        this.setState(state)
     }
 
     render() {
@@ -80,17 +65,17 @@ class PageOne extends React.Component {
           }));
 
         return (
-            <div style={container}>
-                <div style={header}>
-                    <h3 style={subtitle}>Build Visualisation From Problem</h3>
+            <div className={css.container}>
+                <div className={css.header}>
+                    <h3 className={css.subtitle}>Build Visualisation From Problem</h3>
                 </div>
                 <div>
-                    <h3 style={text}>
+                    <h3 className={css.text}>
                         Step 1 - Change planner URL (Optional)
                     </h3>
                 </div>               
                 <form className={useStyles.root} noValidate autoComplete="off">
-                    <div style={text}>
+                    <div className={css.text}>
                         <TextField onChange={ e => this.handleNewURL(e.target.value)} id="outlined-basic" label="URL" size='small' variant="outlined" style={{float: 'left', width: '90%', marginLeft: '10%'}}/>
                     </div>
                     <div style={{float: 'left', marginLeft: '1%', alignItems: 'center'}}>
@@ -100,11 +85,14 @@ class PageOne extends React.Component {
                     </div>
                 </form>          
                 <div>
-                    <h3 style={text}>
+                    <h3 className={css.text}>
                         Step 2 - Upload Problem, Domain and Animation Profile Files
                     </h3>
                 </div>               
-                <DropAndFetch onClick={this.handleOnClick} onStore={this.handleStore} newURL={this.state.fineUrl}/>              
+                <DropAndFetch onClick={this.handleOnClick} onStore={this.handleStore} newURL={this.state.fineUrl}/>  
+                <Alert open={this.state.alertURL} reset={this.handleResetAlert} severity="warning">
+                    {this.state.alertMessage}
+                </Alert>           
             </div>
           );
     }
