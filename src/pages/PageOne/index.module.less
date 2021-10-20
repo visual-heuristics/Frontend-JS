@@ -4,28 +4,29 @@
   */
   display: inline-block;
   justify-content: space-around;
-  width: 30%;
   padding: 20px;
 }
 
 .buttonBox {
   padding: 20px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .dropareaBox {
   /* 
 background: #fff;
 */
-  display: flex;
-  justify-content: space-around;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: space-around;
 
 }
 .wrapper {
   position: relative;
-
+  margin-left: 10%;
 }
 .loading {
   position: absolute;
@@ -39,4 +40,16 @@ background: #fff;
   right: 0;
   bottom: 0;
   z-index: 999;
+}
+.dropzoneAreaBox {
+  width: 320px;
+  height: 200px;
+  background-color: red;
+}
+.fileTitle {
+  font-size: 22px;
+}
+.fileDesc {
+  font-size: 20px;
+  line-height: 30px;
 }

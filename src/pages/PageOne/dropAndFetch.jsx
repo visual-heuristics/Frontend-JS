@@ -86,8 +86,8 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
 
   return (
     <React.Fragment>
-      <div>
-        <Container component="main" className={css.dropareaBox}>
+      <div className={css.dropareaBox}>
+        <div>
           {dragsAndDrops.map((drag) => (
             <DropZone
               key={drag.name}
@@ -98,8 +98,8 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
             />
           ))}
           {loading && <div className={css.loadingBox}/>}
-        </Container>
-        <Container maxWidth="sm" component="main">
+        </div>
+        <div>
           <div className={css.buttonBox}>
             <Button
               variant="contained"
@@ -121,7 +121,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
             {loading && <CircularProgress size={24} className={css.loading}/>}
             </div>
           </div>
-        </Container>
+        </div>
       </div>
     </React.Fragment>
   );

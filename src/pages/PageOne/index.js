@@ -7,8 +7,9 @@ import Button from '@material-ui/core/Button';
 
 const container = {
 	width: "100%",
-	height: "100%",
-	backgroundColor: "#FFFFFF"
+	height: "calc(100% - 65px)",
+	backgroundColor: "#FFFFFF",
+    overflow: 'auto'
 }
 
 const header = {
@@ -31,9 +32,7 @@ const subtitle = {
 
 const text = {
     textAlign: 'left',
-    marginTop: '2%',
-    marginLeft: '25%',
-    marginRight: '25%'
+    margin: '10px 25%'
 }
 
 class PageOne extends React.Component {
@@ -100,7 +99,7 @@ class PageOne extends React.Component {
                         </Button>
                     </div>
                 </form>          
-                <div style={{marginTop:"5%"}}>
+                <div>
                     <h3 style={text}>
                         Step 2 - Upload Problem, Domain and Animation Profile Files
                     </h3>
