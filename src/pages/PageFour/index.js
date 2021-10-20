@@ -52,6 +52,7 @@ class PageFour extends React.Component {
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+        this.receiveMessageFromPlugin = this.receiveMessageFromPlugin.bind(this);
     }
 
     updateWindowDimensions() {
@@ -84,10 +85,11 @@ class PageFour extends React.Component {
     componentDidMount() {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
-        this.data = {
-            action: 'loadfile'
-        }
-        window.addEventListener("message", this.receiveMessageFromPlugin, false)
+        // this.data = {
+        //     action: 'loadfile'
+        // }
+        // window.parent && window.parent.postMessage(this.data, '*')
+        // window.addEventListener("message", this.receiveMessageFromPlugin, false)
 
     }
 
@@ -410,6 +412,7 @@ class PageFour extends React.Component {
             clearInterval(this.handlerPlay);
         }
         this.refDom.removeEventListener('resize', this.updateWindowDimensions);
+        // window.removeEventListener("message", this.receiveMessageFromPlugin, false);
     }
 
     render() {
