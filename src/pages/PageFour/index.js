@@ -1,7 +1,8 @@
 import React from "react";
 import {Stage, Text, Sprite} from '@inlet/react-pixi';
 import {utils} from 'pixi.js';
-import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent} from './dataUtils';
+import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent,
+        getAllStages, getSteps, getStepInfo, getSubGoal, getStepSubgoalMap} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -51,6 +52,7 @@ class PageFour extends React.Component {
         // in this class needs to bind like this:
         this.handleOnClick = this.handleOnClick.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+        this.receiveMessageFromPlugin = this.receiveMessageFromPlugin.bind(this);
     }
 
     updateWindowDimensions() {
@@ -82,7 +84,38 @@ class PageFour extends React.Component {
 
     componentDidMount() {
         this.updateWindowDimensions();
-        window.addEventListener('resize', this.updateWindowDimensions);
+        this.refDom.addEventListener('resize', this.updateWindowDimensions);
+        // this.data = {
+        //     action: 'loadfile'
+        // }
+        // window.parent && window.parent.postMessage(this.data, '*')
+        // window.addEventListener("message", this.receiveMessageFromPlugin, false)
+
+    }
+
+    receiveMessageFromPlugin ( event ) {
+        if(event.origin!= "http://localhost:3000"){
+            console.log( 'iframe is working:', event.origin );
+        let contentObject = {};
+
+        const content = localStorage.getItem('fileContent');
+        if(content) {
+            contentObject = JSON.parse(content);
+            allStages = getAllStages();
+            steps = getSteps();
+            stepInfo =  getStepInfo();
+            subGoal = getSubGoal();
+            stepSubgoalMap = getStepSubgoalMap();
+            vfg = contentObject;
+            textContent = content
+
+            this.stepItem = {};
+            steps.forEach((step, i) => {
+                this.stepItem[i] = React.createRef();
+            })
+            this.setState({drawSprites: allStages[0]})
+        }
+        }
     }
 
     highlight(index) {
@@ -380,6 +413,7 @@ class PageFour extends React.Component {
             clearInterval(this.handlerPlay);
         }
         this.refDom.removeEventListener('resize', this.updateWindowDimensions);
+        // window.removeEventListener("message", this.receiveMessageFromPlugin, false);
     }
 
     render() {

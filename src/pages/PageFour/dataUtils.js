@@ -5,7 +5,7 @@ if(content) {
     contentObject = JSON.parse(content);
 }
 
-function getAllStages() {
+export function getAllStages() {
     const visualStages = contentObject.visualStages || [];
     const stages = visualStages.map(stage => {
         return stage.visualSprites;
@@ -13,16 +13,16 @@ function getAllStages() {
     return stages;
 }
 
-function getSteps() {
+export function getSteps() {
     return contentObject.visualStages ? contentObject.visualStages.map((s =>s.stageName)) : [];
 }
 
-function getStepInfo() {
+export function getStepInfo() {
     return contentObject.visualStages ? contentObject.visualStages.map((s =>s.stageInfo)) : [];
 }
 
 
-function getSubGoal() {
+export function getSubGoal() {
     if( !contentObject.subgoalMap) {
         return {};
     }
@@ -46,7 +46,7 @@ function getSubGoal() {
     return map;
 }
 
-function getStepSubgoalMap() {
+export function getStepSubgoalMap() {
     if( !contentObject.subgoalMap) {
         return {};
     }
