@@ -39,7 +39,7 @@ const nav = {
     problem: '/problem',
     vfg: '/vfg',
     manual: 'https://planimation.github.io/documentation/ ',
-    demo: '/demo',
+    demo: 'https://www.youtube.com/watch?v=Cj2rWdt1YQU',
     home: '/'
 };
 
@@ -51,8 +51,11 @@ function NavigationBar() {
     const handleClick = (url) => {
         setUrl(url);
         if(url==='manual'){
-          window.location.href(nav[url])
-        }else{
+          // window.location.href(nav[url])
+        }else if(url==='demo'){
+          // window.location.href(nav[url])
+        }
+        else{
           history.push(nav[url]);
 
         }
@@ -75,7 +78,7 @@ function NavigationBar() {
           <a href={'https://planimation.github.io/documentation/'} target='_blank' rel="noreferrer" className={classes.alink}>User Manual</a>
         </Link>
         <Link variant="button" color="inherit" onClick={()=>handleClick('demo')} className={classes.link}>
-          Demo
+        <a href={'https://www.youtube.com/watch?v=Cj2rWdt1YQU'} target='_blank' rel="noreferrer" className={classes.alink}>Demo</a>
         </Link>
       </nav>
       <Button color="inherit" variant="outlined"onClick={()=>handleClick('home')}  className={classes.link} >

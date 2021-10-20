@@ -150,7 +150,7 @@ export default function Home() {
         window.open('https://planimation.github.io/documentation/')
         break;
       case 4:
-        history.push('/demo');
+        window.open('https://www.youtube.com/watch?v=Cj2rWdt1YQU')
         break;
       default: return;
     }
