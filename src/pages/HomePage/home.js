@@ -93,7 +93,7 @@ const tiers = [
   {
     title: 'VFG',
     pageNo: 2,
-    description: ['Build visualisation from \nVFG'],
+    description: ['Build visualisation from VFG'],
     buttonText: 'Sign up for free',
     buttonVariant: 'outlined',
   },

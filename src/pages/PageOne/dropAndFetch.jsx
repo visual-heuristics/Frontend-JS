@@ -23,7 +23,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
     {
       name: "Domain",
       fileType: ".pddl",
-      desc: "or predictes and actions",
+      desc: "for predictes and actions",
     },
     {
       name: "Problem",
