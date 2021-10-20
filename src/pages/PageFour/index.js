@@ -84,7 +84,7 @@ class PageFour extends React.Component {
 
     componentDidMount() {
         this.updateWindowDimensions();
-        window.addEventListener('resize', this.updateWindowDimensions);
+        this.refDom.addEventListener('resize', this.updateWindowDimensions);
         // this.data = {
         //     action: 'loadfile'
         // }
@@ -94,7 +94,8 @@ class PageFour extends React.Component {
     }
 
     receiveMessageFromPlugin ( event ) {
-        console.log( 'iframe is working:', event.data );
+        if(event.origin!= "http://localhost:3000"){
+            console.log( 'iframe is working:', event.origin );
         let contentObject = {};
 
         const content = localStorage.getItem('fileContent');
@@ -114,7 +115,7 @@ class PageFour extends React.Component {
             })
             this.setState({drawSprites: allStages[0]})
         }
-
+        }
     }
 
     highlight(index) {
