@@ -3,31 +3,37 @@ import DropZone from "./dropZone";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import css from "./index.module.less";
+import css from "../../Styles/index.module.less";
+import Alert from "../../components/alertInFormat";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
  * Three DropZones and Upload button to fetch pddl to server
  * @param {function} props onStore function to send file to pageFour
  * @param {function} props onClick function to go back to home
- * @param {string} props url argument to paas to backend
+ * @param {string} props url argument to pass to backend
  * @returns
  */
 export default function DropAndFetch({ onStore, onClick, newURL }) {
   const [dataFiles, setDataFiles] = useState({});
+  const [showAlert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const dragsAndDrops = [
-    { name: "Domain", fileType: ".pddl", desc: "or predictes and actions." },
+    {
+      name: "Domain",
+      fileType: ".pddl",
+      desc: "or predictes and actions",
+    },
     {
       name: "Problem",
       fileType: ".pddl",
-      desc: "for objects, initial state and goal.",
+      desc: "for objects, initial state and goal",
     },
     {
       name: "Animation",
       fileType: ".pddl",
-      desc: "object is representation.",
+      desc: "object representations",
     },
   ];
 
@@ -43,7 +49,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       formData.append(name, files[name]);
     }
     try {
-      setLoading(true)
+      setLoading(true);
       const resp = await fetch(
         "https://planimation.planning.domains/upload/pddl",
         {
@@ -63,6 +69,10 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
     }
   };
 
+  const handleResetAlert = () => {
+    setAlert(false);
+  };
+
   const handleSubmit = () => {
     //Control check for files
     if (newURL.lenght > 1) {
@@ -76,7 +86,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       uploadPDDL(dataFiles);
     } else {
       console.log("Some files are missing");
-      alert("Some files are missing");
+      setAlert(true);
     }
   };
 
@@ -97,7 +107,7 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
               onFileLoad={handleFileLoad}
             />
           ))}
-          {loading && <div className={css.loadingBox}/>}
+          {loading && <div className={css.loadingBox} />}
         </Container>
         <Container maxWidth="sm" component="main">
           <div className={css.buttonBox}>
@@ -109,19 +119,24 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
               Cancel
             </Button>
             <div className={css.wrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<CloudUploadIcon />}
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              Upload Files
-            </Button>
-            {loading && <CircularProgress size={24} className={css.loading}/>}
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CloudUploadIcon />}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                Upload Files
+              </Button>
+              {loading && (
+                <CircularProgress size={24} className={css.loading} />
+              )}
             </div>
           </div>
         </Container>
+        <Alert open={showAlert} reset={handleResetAlert} severity="warning">
+          "Some files are missing"
+        </Alert>
       </div>
     </React.Fragment>
   );
