@@ -33,7 +33,7 @@ class PageFour extends React.Component {
 
         this.state = {
             // data that will be used/changed in render function
-            spriteIndex: 0,
+            stageIndex: 0,
             stepInfoIndex: 0,
             showKey: '',
             showPlayButton: true,
@@ -54,7 +54,7 @@ class PageFour extends React.Component {
     }
 
     handleSubItemClick(key) {
-        // this.state.spriteIndex = index;
+        // this.state.stageIndex = index;
         if(this.state.showKey !== key) {
             this.setState({
                 showKey: key,
@@ -78,7 +78,7 @@ class PageFour extends React.Component {
 
     animation(index) {
         // 2 sets of sprites
-        const previousStageIndex = this.state.spriteIndex;
+        const previousStageIndex = this.state.stageIndex;
         const previousStage = allStages[previousStageIndex];
         const newStage = allStages[index];
         const times = 20;
@@ -163,7 +163,7 @@ class PageFour extends React.Component {
         const map = this.highlight(index)
 
         this.setState({
-            spriteIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
@@ -182,7 +182,7 @@ class PageFour extends React.Component {
         const map = this.highlight(index)
 
         this.setState({
-            spriteIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
@@ -201,7 +201,7 @@ class PageFour extends React.Component {
             this.animation(previousIndex)
             const map = this.highlight(previousIndex)
             this.setState({
-                spriteIndex: previousIndex,
+                stageIndex: previousIndex,
                 stepInfoIndex: previousIndex,
                 selectedSubGoals: map
             });
@@ -219,7 +219,7 @@ class PageFour extends React.Component {
             this.animation(nextIndex)
             const map = this.highlight(nextIndex)
             this.setState({
-                spriteIndex: nextIndex,
+                stageIndex: nextIndex,
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map
             });
@@ -235,7 +235,7 @@ class PageFour extends React.Component {
         } else {
             const map = this.highlight(nextIndex)
             this.setState({
-                spriteIndex: nextIndex,
+                stageIndex: nextIndex,
                 stepInfoIndex: nextIndex,
                 selectedSubGoals: map,
                 playButtonColor: 'default',
@@ -253,7 +253,7 @@ class PageFour extends React.Component {
                     const map = this.highlight(nextIndex)
                     this.animation(nextIndex)
                     this.setState({
-                        spriteIndex: nextIndex,
+                        stageIndex: nextIndex,
                         stepInfoIndex: nextIndex,
                         selectedSubGoals: map
                     })
@@ -300,7 +300,7 @@ class PageFour extends React.Component {
         this.animation(0)
         const map = this.highlight(0)
         this.setState( {
-            spriteIndex: 0,
+            stageIndex: 0,
             stepInfoIndex: 0,
             selectedSubGoals: map,
             playButtonColor: 'primary',
@@ -317,7 +317,7 @@ class PageFour extends React.Component {
         this.animation(index)
         const map = this.highlight(index)
         this.setState( {
-            spriteIndex: index,
+            stageIndex: index,
             stepInfoIndex: index,
             selectedSubGoals: map,
             playButtonColor: 'primary',
