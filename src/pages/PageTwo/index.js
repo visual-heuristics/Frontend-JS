@@ -121,7 +121,7 @@ handleFileChange(files) {
 
 handleContinue() {
     console.log(this.state.files.length);
-    if(this.state.files.length > 1){
+    if(this.state.files.length > 0){
       window.location.href = '/demo';
     } else {
       this.handleAlert("No file to process")
