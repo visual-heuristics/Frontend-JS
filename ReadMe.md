@@ -218,11 +218,15 @@ https://confluence.cis.unimelb.edu.au:8443/display/VH/Design+Notebook
 ### Operational Concept Documents
 
 https://confluence.cis.unimelb.edu.au:8443/display/VH/Operational+Concept+Documents
-<h1 id="6.0"> 6.0 Change Log </h1> 
+
 
 ### Directory structure and key files and components
 
 https://confluence.cis.unimelb.edu.au:8443/display/VH/Developer+Information+Frontend
+
+
+<h1 id="6.0"> 6.0 Change Log </h1> 
+
 
 ### 19/08/2021
 * Fork from original repository, initial commits
