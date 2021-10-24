@@ -8,7 +8,7 @@ planimation is a modular and extensible open source framework to visualize seque
 
 [2.0 Deployment](#2.0)
     
-[3.0 Development Environment Document](#3.0)
+[3.0 Development Environment](#3.0)
 
 [4.0 Using the system](#4.0)
  
@@ -128,7 +128,7 @@ yarn test  //or “npm test” or testing in Jest
 Open the link in your browser, and you should see a visualisation of block world .
 
 
-<h1 id="3.0"> 3.0 Development Environment Document</h1>
+<h1 id="3.0"> 3.0 Development Environment</h1>
 
 ### Technical Environment
 
