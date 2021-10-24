@@ -12,7 +12,7 @@ planimation is a modular and extensible open source framework to visualize seque
 
 [4.0 Using the system](#4.0)
  
-[5.0 Architecture Diagrams](#5.0)
+[5.0 Architecture and Design](#5.0)
 
 [6.0 Change Log](#6.0)
 
