@@ -16,7 +16,7 @@ planimation is a modular and extensible open source framework to visualize seque
 
 [6.0 Change Log](#6.0)
 
-[7.0 Quality Assurance](#7.0)
+[7.0 Demo](#7.0)
 
 <h1 id="1.0"> 1.0 Project Overview </h1>
 
@@ -270,10 +270,6 @@ https://confluence.cis.unimelb.edu.au:8443/display/VH/Developer+Information+Fron
 ### 21/10/2021
 * Updated tests
 
-<h1 id="7.0"> 7.0 Quality Assurance </h1>
-
-
-
-### Demo
+<h1 id="7.0"> 7.0 Demo</h1>
 
 https://morning-ridge-78538.herokuapp.com/
