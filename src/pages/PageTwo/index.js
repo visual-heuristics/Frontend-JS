@@ -104,29 +104,29 @@ class PageTwo extends React.Component {
         localStorage.setItem('fileContent', content);
     };
     reader.readAsText(fileHandler);
-}
+  }
 
-handleOnClick() {
+  handleOnClick() {
     this.props.history.push('/')
-}
+  }
 
-handleFileChange(files) {
+  handleFileChange(files) {
     console.info("files: ", files);
     const fileHandler = files[0];
 
     if(fileHandler) {
         this.readFileContent(fileHandler);
     }
-}
+  }
 
-handleContinue() {
+  handleContinue() {
     console.log(this.state.files.length);
     if(this.state.files.length > 0){
       window.location.href = '/demo';
     } else {
       this.handleAlert("No file to process")
     } 
-}
+  }
 
     
 render() {

@@ -35,7 +35,6 @@ function App() {
         <Route path="/demo" component={PageFour} />
       </Switch>
       </ThemeProvider>
-      {/* <div>this is app</div> */}
     </div>
     </div>
   );

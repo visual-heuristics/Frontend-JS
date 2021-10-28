@@ -27,21 +27,6 @@ class HomePage extends React.Component {
         return (
             <div>
                 <Home />
-                {/* <div>
-                    <button onClick={()=>this.handleOnClick('1')}
-                            className={styles.btn}>
-                            to page 1
-                    </button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('2')}>to page 2</button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('3')}>to page 3</button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('4')}>to page 4</button>
-                </div> */}
             </div>
           );
     }
