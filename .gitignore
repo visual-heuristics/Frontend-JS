@@ -12,14 +12,12 @@
 /build
 /prototypes
 /data samples
-
 /planimationLibrary.js
 
 # misc
 .DS_Store
 .env.local
 .env.development.local
-.env.test.local
 .env.production.local
 
 npm-debug.log*
