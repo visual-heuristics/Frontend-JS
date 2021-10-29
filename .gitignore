@@ -12,8 +12,7 @@
 /build
 /prototypes
 /data samples
-/docs
-/tests
+
 /planimationLibrary.js
 
 # misc
@@ -30,4 +29,4 @@ yarn-error.log*
 #documents
 /prototypes
 /data samples
-/docs
+
