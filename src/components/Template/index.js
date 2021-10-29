@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.module.less';
 
+
 class Template extends React.Component {
     // init data
     constructor(props) {

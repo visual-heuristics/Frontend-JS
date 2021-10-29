@@ -7,6 +7,6 @@ test('renders learn react link', () => {
     <Router>
       <App />
     </Router>);
-  const linkElement = screen.getByText(/this is app/i);
+  const linkElement = screen.getByText(/Quickly build an visualisation animation form problem or VFG file shows the plan and subplan for each problem./i);
   expect(linkElement).toBeInTheDocument();
 });
