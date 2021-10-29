@@ -11,11 +11,25 @@ import Slider from "@material-ui/core/Slider";
 import styles from "./index.less";
 import { steps } from "./dataUtils";
 
+/**
+ * Helper function to use in Slider MUI component
+ * @param {*} value
+ * @returns
+ */
 function valuetext(value) {
   return `${value}`;
 }
 
-export default function ViScreen({ canvasWidth, canvasHeight, sprites, vfg }) {
+/**
+ * Function component that parse each sprite and adjust the VFG data to PixiJS format
+ * and renders them into screen.
+ * @param {Integer} canvasWidth
+ * @param {Integer} canvasHeight
+ * @param {Array} sprites
+ * @param {Object} vfg file
+ * @returns Main visualisation screen with all sprites
+ */
+export default function Screen({ canvasWidth, canvasHeight, sprites, vfg }) {
   return (
     <React.Fragment>
       <Stage
@@ -25,17 +39,6 @@ export default function ViScreen({ canvasWidth, canvasHeight, sprites, vfg }) {
         key={"main-graph"}
       >
         {sprites.map((sprite, i) => {
-          // Get the texture name
-          let textureName = sprite.prefabimage;
-          // Get the color of the sprite
-          let color = null;
-          if (sprite.color) {
-            color = utils.rgb2hex([
-              sprite.color.r,
-              sprite.color.g,
-              sprite.color.b,
-            ]);
-          }
           // Initialize the rotation of the sprite
           let rotation = 0;
           // Initialize the x-axis coordinate position of the sprite
@@ -44,7 +47,6 @@ export default function ViScreen({ canvasWidth, canvasHeight, sprites, vfg }) {
           let y = canvasHeight - sprite.maxY * canvasHeight;
           // Initialize the anchor (i.e. the origin point) of the sprite
           let anchor = (0, 0);
-          let alpha = sprite.color.a;
           // Update the anchor, rotation, (x,y) location if the sprite need to be rotated
           if ("rotate" in sprite) {
             anchor = (0.5, 0.5);
@@ -55,52 +57,82 @@ export default function ViScreen({ canvasWidth, canvasHeight, sprites, vfg }) {
             y = canvasHeight - sprite.minY * canvasHeight;
           }
           // Draw the sprite with a text
-          <React.Fragment key={i}>
-            <Sprite
-              // the image texture of the sprite
-              image={
-                "data:image/png;base64," +
-                vfg.imageTable.m_values[
-                  vfg.imageTable.m_keys.indexOf(sprite.prefabimage)
-                ]
-              }
-              name={sprite.name}
-              anchor={anchor}
-              rotation={rotation}
-              x={x}
-              y={y}
-              width={(sprite.maxX - sprite.minX) * canvasHeight}
-              height={(sprite.maxY - sprite.minY) * canvasHeight}
-              tint={color}
-              alpha={alpha}
-            />
-            ;
-            <Text
-              // text on the sprite
-              text={sprite.showname ? sprite.name : ""}
-              style={{ fontFamily: "Arial", fontSize: 16, fill: 0x000000 }}
-              anchor={(0.5, 0.5)}
-              x={x + ((sprite.maxX - sprite.minX) * canvasHeight) / 2}
-              y={y + ((sprite.maxY - sprite.minY) * canvasHeight) / 2}
-            />
-            ;
-          </React.Fragment>;
+          return (
+            <React.Fragment key={i}>
+              <Sprite
+                // the image texture of the sprite
+                image={
+                  "data:image/png;base64," +
+                  vfg.imageTable.m_values[
+                    vfg.imageTable.m_keys.indexOf(sprite.prefabimage)
+                  ]
+                }
+                name={sprite.name}
+                anchor={anchor}
+                rotation={rotation}
+                x={x}
+                y={y}
+                width={(sprite.maxX - sprite.minX) * canvasHeight}
+                height={(sprite.maxY - sprite.minY) * canvasHeight}
+                tint={
+                  "color" in sprite
+                    ? utils.rgb2hex([
+                        sprite.color.r,
+                        sprite.color.g,
+                        sprite.color.b,
+                      ])
+                    : null
+                }
+                alpha={sprite.color.a}
+              />
+              <Text
+                // text on the sprite
+                text={sprite.showname ? sprite.name : ""}
+                style={{ fontFamily: "Arial", fontSize: 16, fill: 0x000000 }}
+                anchor={(0.5, 0.5)}
+                x={x + ((sprite.maxX - sprite.minX) * canvasHeight) / 2}
+                y={y + ((sprite.maxY - sprite.minY) * canvasHeight) / 2}
+              />
+            </React.Fragment>
+          );
         })}
       </Stage>
     </React.Fragment>
   );
 }
 
-export function ControlPanel(props) {
-  const { playButtonColor, pauseButtonColor, stepInfoIndex } = props;
-
+/**
+ * Renders panel with buttons to control animation: play, stop,
+ * previous and next step, restart from begining and speed
+ * @param {Style} playButtonColor  from pageFour state
+ * @param {Style} pauseButtonColor from pageFour state
+ * @param {Integer} stepInfoIndex from pageFour state
+ * @param {function} onPreviousClick to handle previous button click event
+ * @param {function} onStartClick to handle play button click event
+ * @param {function} onPauseClick to handle pause button click event
+ * @param {function} onNextClick to handle next button click event
+ * @param {function} onResetClick to handle reset button click event
+ * @param {function} onSpeedControllor to handle speed slider change event
+ * @returns Control panel
+ */
+export function ControlPanel({
+  playButtonColor,
+  pauseButtonColor,
+  stepInfoIndex,
+  onPreviousClick,
+  onStartClick,
+  onPauseClick,
+  onNextClick,
+  onResetClick,
+  onSpeedControllor,
+}) {
   return (
     <React.Fragment>
       <IconButton
         color="primary"
         style={{ float: "left", marginLeft: "6%", marginRight: "5%" }}
         onClick={() => {
-          this.handlePreviousClick(stepInfoIndex);
+          onPreviousClick(stepInfoIndex);
         }}
       >
         <SkipPreviousIcon fontSize="large" />
@@ -109,7 +141,7 @@ export function ControlPanel(props) {
         color={playButtonColor}
         style={{ float: "left", marginRight: "6%" }}
         onClick={() => {
-          this.handleStartClick(stepInfoIndex);
+          onStartClick(stepInfoIndex);
         }}
       >
         <PlayCircleFilledIcon fontSize="large" />
@@ -118,7 +150,7 @@ export function ControlPanel(props) {
         color={pauseButtonColor}
         style={{ float: "left", marginRight: "6%" }}
         onClick={() => {
-          this.handlePauseClick(stepInfoIndex);
+          onPauseClick(stepInfoIndex);
         }}
       >
         <PauseCircleFilledIcon fontSize="large" />
@@ -127,7 +159,7 @@ export function ControlPanel(props) {
         color="primary"
         style={{ float: "left", marginRight: "6%" }}
         onClick={() => {
-          this.handleNextClick(stepInfoIndex);
+          onNextClick(stepInfoIndex);
         }}
       >
         <SkipNextIcon fontSize="large" />
@@ -136,7 +168,7 @@ export function ControlPanel(props) {
         color="primary"
         style={{ float: "left", marginRight: "10%", marginTop: "5px" }}
         onClick={() => {
-          this.handleResetClick(stepInfoIndex);
+          onResetClick(stepInfoIndex);
         }}
       >
         <ReplayIcon fontSize="medium" />
@@ -144,7 +176,7 @@ export function ControlPanel(props) {
       <ul>Speed:</ul>
       <Slider
         onChange={(event, newValue) => {
-          this.handleSpeedControllor(newValue);
+          onSpeedControllor(newValue);
         }}
         defaultValue={3}
         getAriaValueText={valuetext}
@@ -160,20 +192,28 @@ export function ControlPanel(props) {
   );
 }
 
-export function StepScreen({ stepInfoIndex, stepItem, stepInfo }) {
+/**
+ * Renders list of steps and step info on the left side of the screen
+ * @param {Integer} stepInfoIndex from pageFour state
+ * @param {Array} stepItem list of steps from dataUtils VFG parser
+ * @param {Array} stepInfo list of steps info from dataUtils VFG parser
+ * @param {function} onStepClick handle change current step click event
+ * @returns list of steps and info
+ */
+export function StepScreen({ stepInfoIndex, stepItem, stepInfo, onStepClick }) {
   return (
     <React.Fragment>
       <div className={styles.sub_title}> Steps </div>
       <div className={styles.left_upper}>
         {steps &&
-          steps.map((step, i) => {
+          steps.map((step, i) => (
             <div
               className={styles.stage_item}
               style={{
                 backgroundColor: i === stepInfoIndex ? "#eef" : "white",
               }}
               onClick={() => {
-                this.handleStepsClick(i);
+                onStepClick(i);
               }}
               ref={stepItem[i]}
               key={i}
@@ -181,18 +221,78 @@ export function StepScreen({ stepInfoIndex, stepItem, stepInfo }) {
               <ul>
                 <li className={styles.stage_li}>{i + ". " + step}</li>
               </ul>
-            </div>;
-          })}
-        <div className={styles.sub_title}> Step Info </div>
-        <div className={styles.step_info}>{stepInfo[stepInfoIndex]}</div>
+            </div>
+          ))}
       </div>
+      <div className={styles.sub_title}> Step Info </div>
+      <div className={styles.step_info}>{stepInfo[stepInfoIndex]}</div>
     </React.Fragment>
   );
 }
 
-/*export function GoalScreen() {
-    return ( 
-
-     );
+/**
+ * Renders subgoal menu
+ *
+ * @param {Array} sprites list of sprites from dataUtils VFG parser
+ * @param {Array} subGoal list of subgoals from dataUtils VFG parser
+ * @param {Object} selectedSubGoals from pageFour state
+ * @param {String} showKey from pageFour state
+ * @param {function} onSubItemClick handle change current subgoal change event
+ * @param {function} onSubgoalStepItemClick handle show subgoals step list event
+ * @returns
+ */
+export function GoalScreen({
+  sprites,
+  subGoal,
+  selectedSubGoals,
+  showKey,
+  onSubItemClick,
+  onSubgoalStepItemClick,
+}) {
+  return (
+    <React.Fragment>
+      <div className={styles.sub_title} style={{ position: "relative" }}>
+        <span className={styles.sub_title_key}>Subgoal</span>
+        <span className={styles.sub_title_selected}>
+          {Object.keys(selectedSubGoals || {}).length}/{subGoal.size}
+        </span>
+      </div>
+      <div className={styles.sub_list}>
+        {sprites &&
+          [...subGoal.keys()].map((key) => {
+            return (
+              <div
+                className={
+                  styles.sub_item +
+                  " " +
+                  (selectedSubGoals[key] ? styles.highlight_item : " ")
+                }
+                key={key}
+                onClick={() => {
+                  onSubItemClick(key);
+                }}
+              >
+                {key}
+                <div
+                  className={styles.sub_item_menu}
+                  style={{ display: showKey === key ? "block" : "none" }}
+                >
+                  {subGoal.get(key).map((value) => {
+                    return (
+                      <div
+                        className={styles.sub_item_menu_item}
+                        onClick={() => onSubgoalStepItemClick(value)}
+                        key={key + value}
+                      >
+                        Step {value}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </React.Fragment>
+  );
 }
-*/

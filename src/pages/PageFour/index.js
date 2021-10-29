@@ -3,7 +3,7 @@ import {subGoal, stepInfo, allStages, steps, stepSubgoalMap, vfg, textContent,
         getAllStages, getSteps, getStepInfo, getSubGoal, getStepSubgoalMap} from './dataUtils';
 import Button from '@material-ui/core/Button';
 import styles from './index.less';
-import ViScreen, { ControlPanel, StepScreen } from "./screenComponents";
+import Screen, { ControlPanel, StepScreen, GoalScreen } from "./screenComponents";
 
 
 class PageFour extends React.Component {
@@ -39,6 +39,8 @@ class PageFour extends React.Component {
         this.receiveMessageFromPlugin = this.receiveMessageFromPlugin.bind(this);
     }
 
+    
+
     updateWindowDimensions() {
         if(this.refDom){
             const {clientWidth, clientHeight} = this.refDom;
@@ -47,13 +49,17 @@ class PageFour extends React.Component {
                 console.log('client.inner',clientWidth, clientHeight);
             });
         }
-      }
+    }
+
+
 
     handleOnClick() {
         this.props.history.push('/')
     }
 
-    handleSubItemClick(key) {
+
+
+    handleSubItemClick = (key) => {
         // this.state.stageIndex = index;
         if(this.state.showKey !== key) {
             this.setState({
@@ -66,11 +72,15 @@ class PageFour extends React.Component {
         }
     }
 
+
+
     componentDidMount() {
         this.updateWindowDimensions();
         this.refDom.addEventListener('resize', this.updateWindowDimensions);
         
     }
+
+
 
     receiveMessageFromPlugin ( event ) {
         if(event.origin!== "http://localhost:3000"){
@@ -112,8 +122,9 @@ class PageFour extends React.Component {
         return map;
     }
 
+
     /**
-     * Calculate interpolation values between two stages
+     * Calculate and diplays interpolation animation between two stages
      * @param {Integer} index 
      */
     animation(index) {
@@ -186,7 +197,9 @@ class PageFour extends React.Component {
         this.handler = handler;
     };
 
-    handleStepsClick(index) {
+
+
+    handleStepsClick = (index) =>{
         // Get Stage[index] sprites, and display
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
@@ -204,7 +217,9 @@ class PageFour extends React.Component {
         this.animation(index)
     }
 
-    handleSubgoalStepItemClick(value) {
+
+
+    handleSubgoalStepItemClick = (value) => {
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
@@ -224,7 +239,9 @@ class PageFour extends React.Component {
         this.stepItem[index].current.scrollIntoView();
     }
 
-    handlePreviousClick(value) {
+
+
+    handlePreviousClick = (value) => {
         const previousIndex = Number(value) - 1;
         if (previousIndex < 0) {
             alert("It's already the initial state!")
@@ -242,7 +259,9 @@ class PageFour extends React.Component {
         }
     }
 
-    handleNextClick(value) {
+
+
+    handleNextClick = (value) => {
         const nextIndex = Number(value) + 1
         if (nextIndex >= steps.length) {
             alert("It's already the final state!")
@@ -260,7 +279,9 @@ class PageFour extends React.Component {
         }
     }
 
-    handleStartClick(value) {
+
+
+    handleStartClick = (value) => {
         let nextIndex = Number(value) + 1
         if(nextIndex === steps.length) {
             alert("It's already the final state!")
@@ -315,7 +336,9 @@ class PageFour extends React.Component {
         }
     }
 
-    handlePauseClick() {
+
+
+    handlePauseClick = () => {
         if(this.handlerPlay) {
             this.setState( {
                 playButtonColor: 'primary',
@@ -325,7 +348,9 @@ class PageFour extends React.Component {
         }
     }
 
-    handleResetClick() {
+
+
+    handleResetClick = () => {
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
@@ -341,7 +366,9 @@ class PageFour extends React.Component {
         this.stepItem[0].current.scrollIntoView();
     }
 
-    handleShowFinalGoalClick(){
+
+
+    handleShowFinalGoalClick = () =>{
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
         }
@@ -358,7 +385,9 @@ class PageFour extends React.Component {
         this.stepItem[index].current.scrollIntoView();
     }
 
-    handleExportClick(){
+
+
+    handleExportClick = () =>{
         const data = textContent
         let blob = new Blob([data]);
         let filename = "download.vfg";
@@ -382,13 +411,18 @@ class PageFour extends React.Component {
         }
     }
 
-    handleSpeedControllor(value){
+
+
+    handleSpeedControllor = (value) => {
         this.setState({
             playSpeed: value
         })
     }
+
     
-    // prevent crash when jumping  to other pages during the animation playing
+    /**
+     * prevent crash when jumping  to other pages during the animation playing
+     *  */
     componentWillUnmount(){
         if(this.handlerPlay) {
             clearInterval(this.handlerPlay);
@@ -396,6 +430,8 @@ class PageFour extends React.Component {
         this.refDom.removeEventListener('resize', this.updateWindowDimensions);
         
     }
+
+
 
     render() {
         // Get all sprites
@@ -406,13 +442,22 @@ class PageFour extends React.Component {
         return (
             <div className={styles.container} ref={(ref)=>this.refDom=ref}>
                 <div className={styles.left}>
-                    <StepScreen stepInfoIndex={this.state.stepInfoIndex} stepItem={this.stepItem} stepInfo={stepInfo}/>
+                    <StepScreen stepInfoIndex={this.state.stepInfoIndex} stepItem={this.stepItem} stepInfo={stepInfo} onStepClick={this.handleStepsClick}/>
                 </div>
                 <div className={styles.middle}>
-                    <ViScreen canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight}  sprites={this.state.drawSprites} vfg={vfg} />
+                    <Screen canvasWidth={this.state.canvasWidth} canvasHeight={this.state.canvasHeight}  sprites={this.state.drawSprites} vfg={vfg} />
                     <div className={styles.btn_box}>
                         <div>
-                            <ControlPanel playButtonColor={this.state.playButtonColor} pauseButtonColor={this.state.pauseButtonColor} stepInfoIndex={this.state.stepInfoIndex}></ControlPanel>
+                            <ControlPanel 
+                            playButtonColor={this.state.playButtonColor} 
+                            pauseButtonColor={this.state.pauseButtonColor}
+                            stepInfoIndex={this.state.stepInfoIndex}
+                            onPreviousClick={this.handlePreviousClick}
+                            onStartClick={this.handleStartClick}
+                            onPauseClick={this.handlePauseClick}
+                            onNextClick={this.handleNextClick}
+                            onResetClick={this.handleResetClick}
+                            onSpeedControllor={this.handleSpeedControllor}></ControlPanel>
                         </div>
                     </div>
                 </div>
@@ -427,29 +472,8 @@ class PageFour extends React.Component {
                             Export
                         </Button>
                     </div>
-                    <div className={styles.sub_title} style={{position: 'relative'}}>
-                        <span className={styles.sub_title_key}>Subgoal</span>
-                        <span className={styles.sub_title_selected}>{Object.keys(this.state.selectedSubGoals || {}).length}/{subGoal.size}</span>
-                    </div>
-                    <div className={styles.sub_list}>
-                        {   sprites &&
-                            [...subGoal.keys()].map(key => {
-                                return <div className={styles.sub_item + ' ' + (this.state.selectedSubGoals[key] ? styles.highlight_item : ' ')}
-                                            key={key} onClick={()=> {this.handleSubItemClick(key)}}>
-                                        {key} 
-                                        <div className={styles.sub_item_menu}
-                                            style={{display: this.state.showKey === key ? 'block': 'none'}}>
-                                            {subGoal.get(key).map(value => {
-                                                return <div className={styles.sub_item_menu_item}
-                                                            onClick={()=>this.handleSubgoalStepItemClick(value)}
-                                                            key={key + value}
-                                                >Step {value}</div>
-                                            })}
-                                        </div>
-                                    </div>;
-                            })
-                        }
-                    </div>
+                    <GoalScreen sprites={sprites} subGoal={subGoal} selectedSubGoals={this.state.selectedSubGoals}
+                      showKey={this.state.showKey} onSubItemClick={this.handleSubItemClick} onSubgoalStepItemClick={this.handleSubgoalStepItemClick}/>
                 </div>
             </div>
     );

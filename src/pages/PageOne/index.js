@@ -15,7 +15,7 @@ class PageOne extends React.Component {
         this.handleSendURL = this.handleSendURL.bind(this);
     }
 
-    handleOnClick() {
+    handleOnClick = () => {
         this.props.history.push('/')
     }
 

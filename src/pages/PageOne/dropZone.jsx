@@ -1,7 +1,6 @@
 import React from "react";
 import css from "../../Styles/index.module.less";
 import { DropzoneArea } from "material-ui-dropzone";
-import Typography from "@material-ui/core/Typography";
 import { useState } from "react";
 
 /**
@@ -41,7 +40,9 @@ export default function DropZone({ name, desc, fileType, onFileLoad }) {
   return (
     <div className={css.dropzoneBox}>
       <div>
-        <div className={css.fileTitle}><b>{name} File </b></div>
+        <div className={css.fileTitle}>
+          <b>{name} File </b>
+        </div>
         <div className={css.fileDesc}>{desc}</div>
       </div>
       <DropzoneArea

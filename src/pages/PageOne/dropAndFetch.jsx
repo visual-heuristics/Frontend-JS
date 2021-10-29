@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DropZone from "./dropZone";
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import css from "../../Styles/index.module.less";
 import Alert from "../../components/alertInFormat";
@@ -15,7 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
  * @returns
  */
 export default function DropAndFetch({ onStore, onClick, newURL }) {
-  const [dataFiles, setDataFiles] = React.useState({});
+  const [dataFiles, setDataFiles] = useState({});
   const [showAlert, setAlert] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -36,12 +35,6 @@ export default function DropAndFetch({ onStore, onClick, newURL }) {
       desc: "object representations",
     },
   ];
-
-  const componentWillUnmount = () => {
-    setDataFiles = (state, callback) => {
-      return;
-    };
-  };
 
   const uploadPDDL = async (files) => {
     const formData = new FormData();

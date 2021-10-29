@@ -64,7 +64,7 @@ describe('pageOne dropAndFetch: fetch correctly', () =>{
         );
         
         React.useState = jest.fn()
-        .mockReturnValueOnce([{domain: '',problem:'',animation:''},{}])
+        .mockReturnValueOnce([{domain: '',problem:'',animation:''},()=>{}])
         .mockReturnValueOnce([false, ()=>{}])
         .mockReturnValueOnce([false, ()=>{}]);
 

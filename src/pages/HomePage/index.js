@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 import Home from "./home";
-import styles from './index.module.less';
+
+
 class HomePage extends React.Component {
 
     // init data
