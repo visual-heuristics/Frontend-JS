@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-import styles from './index.module.less';
+import Home from "./home";
+
+
 class HomePage extends React.Component {
 
     // init data
@@ -25,24 +26,7 @@ class HomePage extends React.Component {
     render(){
         return (
             <div>
-                <div>
-                    Hello homepage!
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('1')}
-                            className={styles.btn}>
-                            to page 1
-                    </button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('2')}>to page 2</button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('3')}>to page 3</button>
-                </div>
-                <div>
-                    <button onClick={()=>this.handleOnClick('4')}>to page 4</button>
-                </div>
+                <Home />
             </div>
           );
     }
